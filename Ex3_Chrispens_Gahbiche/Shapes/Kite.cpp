@@ -6,6 +6,4 @@
 
 Kite::Kite() {}
 
-Kite::~Kite() {
-
-}
+Kite::~Kite() = default;

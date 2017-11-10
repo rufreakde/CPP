@@ -15,12 +15,6 @@
 
 using namespace std;
 
-/*
-
- set(SOURCE_FILES main.cpp Shapes/Quadrilateral.cpp Shapes/Quadrilateral.h Shapes/Kite.cpp Shapes/Kite.h Shapes/Rhombus.cpp Shapes/Rhombus.h Shapes/Square.cpp Shapes/Square.h Shapes/Parallelogram.cpp Shapes/Parallelogram.h Shapes/Trapezoid.cpp Shapes/Trapezoid.h Shapes/IsoscelesTrapezoid.cpp Shapes/IsoscelesTrapezoid.h Shapes/Rectangle.cpp Shapes/Rectangle.h Interfaces/Quad.cpp Interfaces/Quad.h)
-
-
- */
 
 template<typename T, typename... Args>
 std::unique_ptr<T> make_unique(Args&&... args) {

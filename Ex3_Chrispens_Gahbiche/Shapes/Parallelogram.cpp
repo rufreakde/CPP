@@ -6,6 +6,4 @@
 
 Parallelogram::Parallelogram() {}
 
-Parallelogram::~Parallelogram() {
-
-}
+Parallelogram::~Parallelogram() = default;

@@ -6,6 +6,4 @@
 
 Trapezoid::Trapezoid() {}
 
-Trapezoid::~Trapezoid() {
-
-}
+Trapezoid::~Trapezoid() = default;

@@ -6,6 +6,4 @@
 
 Rectangle::Rectangle() {}
 
-Rectangle::~Rectangle() {
-
-}
+Rectangle::~Rectangle() = default;

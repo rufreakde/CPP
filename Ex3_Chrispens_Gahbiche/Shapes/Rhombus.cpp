@@ -6,4 +6,4 @@
 
 Rhombus::Rhombus() {}
 
-Rhombus::~Rhombus() {}
+Rhombus::~Rhombus() = default;

@@ -6,4 +6,4 @@
 
 Square::Square() {}
 
-Square::~Square() {}
+Square::~Square() = default;
