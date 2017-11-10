@@ -39,3 +39,11 @@ std::array<double,2> Quadrilateral::coord(int _Number) {
 std::string Quadrilateral::name(){
     return _name;
 }
+
+std::array<double, 2>  Quadrilateral::project_point_on_line(std::array<double, 2> point,
+                                           std::array<double, 2> line_point1,
+                                           std::array<double, 2> line_point2) {
+
+
+    std::array<double, 2> proj_point;
+}
