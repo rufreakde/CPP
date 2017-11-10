@@ -45,6 +45,11 @@ int main() {
             std::unique_ptr<Quad>{new IsoscelesTrapezoid{}}
     };
 
+    for(int i=0; i< shapeVector.size(); i++){
+        *shapeVector[i];
+        //printNameCircumferenceArea calls all 3 interface functions internally!
+    }
+
     //unique_ptr
     /*
     std::unique_ptr IsoscelesTrapezoidUniquePointer = std::make_unique<Kite>(isoscelesTrapezoid);

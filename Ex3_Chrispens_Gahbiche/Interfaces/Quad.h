@@ -11,15 +11,16 @@
 class Quad {
 public:
     //constructors
-    //Quad();
-    //~Quad();
+    Quad();
+    ~Quad();
 
     //Functions
     virtual double circumference() = 0; //umfang
     virtual double area() = 0; //fläche
     virtual std::array<double,2> coord(int i) = 0; //i = winkel 0...3
     virtual std::string name() = 0; //typename
-    //virtual void printNameCircumferenceArea();
+
+    virtual void printNameCircumferenceArea();
 };
 
 
