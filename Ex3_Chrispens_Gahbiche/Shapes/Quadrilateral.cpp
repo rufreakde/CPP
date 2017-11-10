@@ -5,12 +5,13 @@
 #include "Quadrilateral.h"
 
 //Constructors
-Quadrilateral::Quadrilateral(){}
+Quadrilateral::Quadrilateral(): Quad(){}
 Quadrilateral::Quadrilateral(std::array<double,2> _Corner1, std::array<double,2> _Corner2, std::array<double,2> _Corner3, std::array<double,2> _Corner4) {
     _corners = {_Corner1, _Corner2, _Corner3, _Corner4};
 }
+Quadrilateral::~Quadrilateral(){}
 
-//functions
+//functions~
 double Quadrilateral::circumference() {
     double tCircumfence = 0;
 

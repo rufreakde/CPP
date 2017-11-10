@@ -15,7 +15,7 @@ protected:
 public:
     Quadrilateral();
     Quadrilateral(std::array<double,2> _Corner1, std::array<double,2> _Corner2,std::array<double,2> _Corner3,std::array<double,2> _Corner4);
-    ~Quadrilateral() = default;
+    ~Quadrilateral();
 
     double circumference();
     double area();

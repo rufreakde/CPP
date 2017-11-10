@@ -20,7 +20,7 @@ public:
     virtual std::array<double,2> coord(int i) = 0; //i = winkel 0...3
     virtual std::string name() = 0; //typename
 
-    virtual void printNameCircumferenceArea();
+    virtual void printNameCircumferenceArea() = 0;
 };
 
 
