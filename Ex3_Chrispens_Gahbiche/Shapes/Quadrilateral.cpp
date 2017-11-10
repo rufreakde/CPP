@@ -28,9 +28,18 @@ double Quadrilateral::area() {
 
     std::array<double, 2> f={0,0};
     std::array<double, 2> e={0,0};
+    std::array<double, 2> g={0,0};
 
     f = project_point_on_line(a, b, c);
     e = project_point_on_line(d, a, f);
+    g = project_point_on_line(d, b, c);
+
+    double a1 = area_right_triangle(a, f, c);
+    double a2 = area_right_triangle(d, g, c);
+    double a3 = area_right_triangle(a, e, d);
+    double a4 = distance(e, d) * distance(e, f);
+
+    return a1 + a2 + a3 + a4;
 
 
 
@@ -82,7 +91,9 @@ double Quadrilateral::distance(std::array<double, 2> x, std::array<double, 2> y)
     return std::sqrt(pow( x[0] - y[0] ,2) + pow( x[1] - y[1] ,2));
 }
 
-double area_right_triangle(std::array<double, 2> a, std::array<double, 2> b_right, std::array<double, 2> c){
+double Quadrilateral::area_right_triangle(std::array<double, 2> a, std::array<double, 2> b_right, std::array<double, 2> c){
     // 90 grad winkel liegt bei b_right
-    return (distance(a, b_right) * distance(a, c))/2;
+    double dist = 0;
+    dist = (distance(a, b_right) * distance(a, c))/2;
+    return dist;
 }

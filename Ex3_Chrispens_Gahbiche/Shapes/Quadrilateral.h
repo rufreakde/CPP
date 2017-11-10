@@ -29,6 +29,7 @@ public:
     double distance(std::array<double, 2> x, std::array<double, 2> y);
 
 
+    double area_right_triangle(std::array<double, 2> a, std::array<double, 2> b_right, std::array<double, 2> c);
 };
 
 
