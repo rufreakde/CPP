@@ -53,8 +53,8 @@ std::array<double, 2>  Quadrilateral::project_point_on_line(std::array<double, 2
 
 void Quadrilateral::printNameCircumferenceArea(){
     std::cout << "#######################" << std::endl;
-    std::cout << "# Name:  " << name() << std::endl;
-    std::cout << "# Circumference: " << circumference() << std::endl;
-    std::cout << "# Area: " << area() << std::endl;
+    std::cout << "# Name:\t\t" << name() << std::endl;
+    std::cout << "# Circumference:\t" << circumference() << std::endl;
+    std::cout << "# Area:\t\t" << area() << std::endl;
     std::cout << "#######################" << std::endl;
 }

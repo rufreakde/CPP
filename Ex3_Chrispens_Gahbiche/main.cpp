@@ -35,7 +35,7 @@ int main() {
 
     //COULD NOT MAKE THIS WORK WITH VECTOR WHY????
     std::array<std::unique_ptr<Quad>, 8> shapeVector{
-            std::unique_ptr<Quad>{new Quadrilateral{}},
+            std::unique_ptr<Quad>{new Quadrilateral{ {1,1}, {1,2}, {2,2}, {2,1}}},
             std::unique_ptr<Quad>{new Kite{}},
             std::unique_ptr<Quad>{new Rhombus{}},
             std::unique_ptr<Quad>{new Square{}},
@@ -46,8 +46,12 @@ int main() {
     };
 
     for(int i=0; i< shapeVector.size(); i++){
-        *shapeVector[i];
-        //printNameCircumferenceArea calls all 3 interface functions internally!
+    *shapeVector[i];
+    //printNameCircumferenceArea calls all 3 interface functions internally!
+}
+    for (auto &shape : shapeVector) {
+        auto test = shape.get();
+        test->printNameCircumferenceArea();
     }
 
     //unique_ptr
