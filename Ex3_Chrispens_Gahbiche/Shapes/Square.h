@@ -11,7 +11,7 @@
 class Square: public Rectangle{
 public:
     Square();
-
+    Square(std::string _Name,std::array<double,2> _Corner1, std::array<double,2> _Corner2, std::array<double,2> _Corner3, std::array<double,2> _Corner4);
     ~Square();
 };
 

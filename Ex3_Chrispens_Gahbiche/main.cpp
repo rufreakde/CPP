@@ -35,14 +35,14 @@ int main() {
 
     //COULD NOT MAKE THIS WORK WITH VECTOR WHY????
     std::array<std::unique_ptr<Quad>, 8> shapeVector{
-            std::unique_ptr<Quad>{new Quadrilateral{ {1,1}, {1,2}, {2,2}, {2,1}}},
-            std::unique_ptr<Quad>{new Kite{}},
-            std::unique_ptr<Quad>{new Rhombus{}},
-            std::unique_ptr<Quad>{new Square{}},
-            std::unique_ptr<Quad>{new Trapezoid{}},
-            std::unique_ptr<Quad>{new Parallelogram{}},
-            std::unique_ptr<Quad>{new Rectangle{}},
-            std::unique_ptr<Quad>{new IsoscelesTrapezoid{}}
+            std::unique_ptr<Quad>{new Quadrilateral{"Quadrilateral", {1,1}, {1,2}, {2,2}, {2,1}}},
+            std::unique_ptr<Quad>{new Kite{"Kite", {1,1}, {1,2}, {2,2}, {2,1}}},
+            std::unique_ptr<Quad>{new Rhombus{"Rhombus", {1,1}, {1,2}, {2,2}, {2,1}}},
+            std::unique_ptr<Quad>{new Square{"Square", {1,1}, {1,2}, {2,2}, {2,1}}},
+            std::unique_ptr<Quad>{new Trapezoid{"Trapezoid", {1,1}, {1,2}, {2,2}, {2,1}}},
+            std::unique_ptr<Quad>{new Parallelogram{"Parallelogram", {1,1}, {1,2}, {2,2}, {2,1}}},
+            std::unique_ptr<Quad>{new Rectangle{"Rectangle", {1,1}, {1,2}, {2,2}, {2,1}}},
+            std::unique_ptr<Quad>{new IsoscelesTrapezoid{"IsoscelesTrapezoid", {1,1}, {1,2}, {2,2}, {2,1}}}
     };
 
     for(int i=0; i< shapeVector.size(); i++){
