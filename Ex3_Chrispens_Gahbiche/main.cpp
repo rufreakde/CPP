@@ -33,8 +33,16 @@ int main() {
     Square square = Square();
     Trapezoid trapezoid = Trapezoid();*/
 
-    std::array<std::unique_ptr<Quad>, 1> shapeVector{
-            std::unique_ptr<Quad>{new Quadrilateral{}}
+    //COULD NOT MAKE THIS WORK WITH VECTOR WHY????
+    std::array<std::unique_ptr<Quad>, 8> shapeVector{
+            std::unique_ptr<Quad>{new Quadrilateral{}},
+            std::unique_ptr<Quad>{new Kite{}},
+            std::unique_ptr<Quad>{new Rhombus{}},
+            std::unique_ptr<Quad>{new Square{}},
+            std::unique_ptr<Quad>{new Trapezoid{}},
+            std::unique_ptr<Quad>{new Parallelogram{}},
+            std::unique_ptr<Quad>{new Rectangle{}},
+            std::unique_ptr<Quad>{new IsoscelesTrapezoid{}}
     };
 
     //unique_ptr
