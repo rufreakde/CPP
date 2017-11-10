@@ -11,8 +11,11 @@
 class Quad {
 public:
     //constructors
+
     Quad() = default;
-    virtual ~Quad() = 0;
+    virtual ~Quad();
+
+
 
     //Functions
     virtual double circumference() = 0; //umfang

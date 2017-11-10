@@ -26,6 +26,8 @@ public:
 
     void printNameCircumferenceArea();
 
+    double distance(std::array<double, 2> x, std::array<double, 2> y);
+
 
 };
 

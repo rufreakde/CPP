@@ -2,6 +2,7 @@
 // Created by Rudolf Chrispens on 08.11.17.
 //
 
+#include <cmath>
 #include "Quadrilateral.h"
 
 //Constructors
@@ -20,15 +21,21 @@ double Quadrilateral::circumference() {
 }
 
 double Quadrilateral::area() {
-    auto coord1 = _corners[0];
-    auto coord2 = _corners[1];
-    auto coord3 = _corners[2];
-    auto coord4 = _corners[3];
+    auto a = _corners[0];
+    auto b = _corners[1];
+    auto c = _corners[2];
+    auto d = _corners[3];
 
-    /*coords AC{(coord3.x - coord1.x), (coord3.y - coord1.y)};
-    coords BD{(coord4.x - coord2.x), (coord4.y - coord2.y)};
-    double crossResult = (AC.x * BD.y) - (AC.y * BD.x);
-    return crossResult * 1/2;*/
+    std::array<double, 2> f={0,0};
+    std::array<double, 2> e={0,0};
+
+    f = project_point_on_line(a, b, c);
+    e = project_point_on_line(d, a, f);
+
+
+
+
+
 }
 
 std::array<double,2> Quadrilateral::coord(int _Number) {
@@ -42,13 +49,25 @@ std::string Quadrilateral::name(){
     return _name;
 }
 
-std::array<double, 2>  Quadrilateral::project_point_on_line(std::array<double, 2> point,
-                                           std::array<double, 2> line_point1,
-                                           std::array<double, 2> line_point2) {
+std::array<double, 2>  Quadrilateral::project_point_on_line(std::array<double, 2> x,
+                                           std::array<double, 2> a,
+                                           std::array<double, 2> b) {
 
 
-    std::array<double, 2> proj_point;
+    std::array<double, 2> proj_point{0,0};
+
+    // Geradengleichung:
+    // y = a*x +b
+    double l = x[0]*(b[0]-a[0]) +x[1]*(b[1] - a[1]);
+    double s = (b[1] - a[1]) / (b[0] - a[0]);
+
+    proj_point[1] = l/(b[0] - a[0]) + b[1] - (b[0]*l)/(b[0] - a[0]);
+    proj_point[0] = - proj_point[1] * s + l / (b[0] -a[0]);
+
+    return proj_point;
+    
 }
+
 
 
 void Quadrilateral::printNameCircumferenceArea(){
@@ -57,4 +76,13 @@ void Quadrilateral::printNameCircumferenceArea(){
     std::cout << "# Circumference:\t" << circumference() << std::endl;
     std::cout << "# Area:\t\t" << area() << std::endl;
     std::cout << "#######################" << std::endl;
+}
+
+double Quadrilateral::distance(std::array<double, 2> x, std::array<double, 2> y) {
+    return std::sqrt(pow( x[0] - y[0] ,2) + pow( x[1] - y[1] ,2));
+}
+
+double area_right_triangle(std::array<double, 2> a, std::array<double, 2> b_right, std::array<double, 2> c){
+    // 90 grad winkel liegt bei b_right
+    return (distance(a, b_right) * distance(a, c))/2;
 }
