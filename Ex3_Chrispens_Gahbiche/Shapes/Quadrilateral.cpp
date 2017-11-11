@@ -3,48 +3,57 @@
 //
 
 #include <cmath>
+#include <utility>
 #include "Quadrilateral.h"
 
 //Constructors
 Quadrilateral::Quadrilateral(): Quad(){}
-Quadrilateral::Quadrilateral(std::string _Name,std::array<double,2> _Corner1, std::array<double,2> _Corner2, std::array<double,2> _Corner3, std::array<double,2> _Corner4) {
+Quadrilateral::Quadrilateral(std::string _Name,
+                             std::array<double,2> _Corner1,
+                             std::array<double,2> _Corner2,
+                             std::array<double,2> _Corner3,
+                             std::array<double,2> _Corner4) {
     _corners = {_Corner1, _Corner2, _Corner3, _Corner4};
-    _name = _Name;
+    _name = std::move(_Name);
 }
-Quadrilateral::~Quadrilateral(){}
+Quadrilateral::~Quadrilateral(){};
 Quad::~Quad(){};
 
 //functions~
 double Quadrilateral::circumference() {
-    double tCircumfence = 0;
-
-    return 0;
-}
-
-double Quadrilateral::area() {
     auto a = _corners[0];
     auto b = _corners[1];
     auto c = _corners[2];
     auto d = _corners[3];
 
-    std::array<double, 2> f={0,0};
-    std::array<double, 2> e={0,0};
-    std::array<double, 2> g={0,0};
+    double tCircumfence = distance(a, b) + distance(b, c) + distance(c, d) + distance(d, a);
 
-    f = project_point_on_line(a, b, c);
-    e = project_point_on_line(d, a, f);
-    g = project_point_on_line(d, b, c);
+    return tCircumfence;
+}
 
-    double a1 = area_right_triangle(a, f, c);
-    double a2 = area_right_triangle(d, g, c);
-    double a3 = area_right_triangle(a, e, d);
-    double a4 = distance(e, d) * distance(e, f);
+double Quadrilateral::area() {
+    // we use Bretschneider's formula
+    // wikipedia.org/wiki/Bretschneider%27s_formula
 
-    return a1 + a2 + a3 + a4;
+    auto A = _corners[0];
+    auto B = _corners[1];
+    auto C = _corners[2];
+    auto D = _corners[3];
 
+    // edges
+    double a = distance(A, B);
+    double b = distance(B, C);
+    double c = distance(C, D);
+    double d = distance(D, A);
 
+    // diagonals
+    double e = distance(A, C);
+    double f = distance(D, B);
 
+    double area = 0.25 * std::sqrt(4*e*e*f*f -
+                                  std::pow((b*b +d*d - a*a - c*c),2));
 
+    return area;
 
 }
 
