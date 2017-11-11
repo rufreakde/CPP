@@ -48,10 +48,23 @@ int main() {
     for(int i=0; i< shapeVector.size(); i++){
     *shapeVector[i];
     //printNameCircumferenceArea calls all 3 interface functions internally!
-}
+    }
+
     for (auto &shape : shapeVector) {
-        auto test = shape.get();
-        test->printNameCircumferenceArea();
+        //3.1
+        cout << "<!-- 3.1 --!>" << endl;
+        auto QuadInterfaceIteration = shape.get();
+        QuadInterfaceIteration->printNameCircumferenceArea();
+        //3.2
+        cout << "<!-- 3.2 --!>" << endl;
+        auto ParallelogramIteration = dynamic_cast<Parallelogram*>(QuadInterfaceIteration);
+        if(ParallelogramIteration != nullptr) {
+            ParallelogramIteration->subdivide();
+            ParallelogramIteration->printSubdivisions();
+        }else{
+            cout << "no subdivide() : "<< QuadInterfaceIteration->name() <<" is not a Parallelogram" << endl;
+        }
+        //3.3
     }
 
     //unique_ptr
