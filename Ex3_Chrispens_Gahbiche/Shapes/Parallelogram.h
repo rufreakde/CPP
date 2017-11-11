@@ -10,8 +10,11 @@
 #include "Trapezoid.h"
 
 class Parallelogram : public Trapezoid {
-
+protected:
     std::vector<Parallelogram> _subdivisions;
+
+    template<class T>
+    void _subdivide();
 
 public:
     Parallelogram();
@@ -19,7 +22,7 @@ public:
     ~Parallelogram();
 
     virtual void subdivide();
-    virtual std::array<double,2> midPoint(std::array<double, 2> p1, std::array<double, 2> p2);
+    virtual std::array<double,2> midPoint(std::array<double, 2> _Point1, std::array<double, 2> _Point2);
     virtual void printSubdivisions();
 };
 
