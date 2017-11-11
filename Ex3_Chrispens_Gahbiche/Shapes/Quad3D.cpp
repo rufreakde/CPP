@@ -20,6 +20,9 @@ double Quad3D::surface() {
 double Quad3D::volume() {
     return _thickness * _quad.area();
 }
+double Quad3D::distance(std::array<double, 2> x, std::array<double, 2> y) {
+    return std::sqrt(pow( x[0] - y[0] ,2) + pow( x[1] - y[1] ,2));
+}
 void Quad3D::setThickness(double _Thickness) {
     _thickness = _Thickness;
 }
@@ -62,8 +65,4 @@ Quad3D &Quad3D::operator=(Quad3D &&_Quad3D) {
 Quad3D::Quad3D(Quad3D &&_Quad3D) {
     _thickness = std::move(_Quad3D._thickness);
     _quad = std::move(_Quad3D._quad);
-}
-
-double Quad3D::distance(std::array<double, 2> x, std::array<double, 2> y) {
-    return std::sqrt(pow( x[0] - y[0] ,2) + pow( x[1] - y[1] ,2));
 }
