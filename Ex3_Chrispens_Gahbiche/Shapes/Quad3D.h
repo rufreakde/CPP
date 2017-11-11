@@ -16,6 +16,7 @@
 #define EX3_QUAD3D_H
 
 
+#include <cmath>
 #include "../shapes/Quadrilateral.h"
 
 class Quad3D {
@@ -38,6 +39,8 @@ public:
     Quad3D &operator=(Quad3D &&_Quad3D);
     Quad3D(Quad3D &&_Quad3D);
 
+private:
+    double distance(std::array<double, 2> x, std::array<double, 2> y);
 };
 
 

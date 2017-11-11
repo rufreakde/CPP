@@ -77,6 +77,7 @@ void Quadrilateral::printNameCircumferenceArea(){
     std::cout << "############################" << std::endl;
 }
 
+
 double Quadrilateral::distance(std::array<double, 2> x, std::array<double, 2> y) {
     return std::sqrt(pow( x[0] - y[0] ,2) + pow( x[1] - y[1] ,2));
 }
