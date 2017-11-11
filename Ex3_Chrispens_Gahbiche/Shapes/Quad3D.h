@@ -39,7 +39,6 @@ public:
     Quad3D &operator=(Quad3D &&_Quad3D);
     Quad3D(Quad3D &&_Quad3D);
 
-private:
     double distance(std::array<double, 2> x, std::array<double, 2> y);
 };
 

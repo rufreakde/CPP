@@ -63,6 +63,7 @@ Quad3D::Quad3D(Quad3D &&_Quad3D) {
     _thickness = std::move(_Quad3D._thickness);
     _quad = std::move(_Quad3D._quad);
 }
-double distance(std::array<double, 2> x, std::array<double, 2> y) {
+
+double Quad3D::distance(std::array<double, 2> x, std::array<double, 2> y) {
     return std::sqrt(pow( x[0] - y[0] ,2) + pow( x[1] - y[1] ,2));
 }
