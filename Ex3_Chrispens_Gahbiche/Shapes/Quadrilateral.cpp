@@ -70,11 +70,11 @@ std::string Quadrilateral::name(){
 
 
 void Quadrilateral::printNameCircumferenceArea(){
-    std::cout << "#######################" << std::endl;
+    std::cout << "############################" << std::endl;
     std::cout << "# Name:\t\t" << name() << std::endl;
     std::cout << "# Circumference:\t" << circumference() << std::endl;
     std::cout << "# Area:\t\t" << area() << std::endl;
-    std::cout << "#######################" << std::endl;
+    std::cout << "############################" << std::endl;
 }
 
 double Quadrilateral::distance(std::array<double, 2> x, std::array<double, 2> y) {
