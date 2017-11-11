@@ -68,26 +68,6 @@ std::string Quadrilateral::name(){
     return _name;
 }
 
-std::array<double, 2>  Quadrilateral::project_point_on_line(std::array<double, 2> x,
-                                           std::array<double, 2> a,
-                                           std::array<double, 2> b) {
-
-
-    std::array<double, 2> proj_point{0,0};
-
-    // Geradengleichung:
-    // y = a*x +b
-    double l = x[0]*(b[0]-a[0]) +x[1]*(b[1] - a[1]);
-    double s = (b[1] - a[1]) / (b[0] - a[0]);
-
-    proj_point[1] = l/(b[0] - a[0]) + b[1] - (b[0]*l)/(b[0] - a[0]);
-    proj_point[0] = - proj_point[1] * s + l / (b[0] -a[0]);
-
-    return proj_point;
-    
-}
-
-
 
 void Quadrilateral::printNameCircumferenceArea(){
     std::cout << "#######################" << std::endl;
@@ -99,11 +79,4 @@ void Quadrilateral::printNameCircumferenceArea(){
 
 double Quadrilateral::distance(std::array<double, 2> x, std::array<double, 2> y) {
     return std::sqrt(pow( x[0] - y[0] ,2) + pow( x[1] - y[1] ,2));
-}
-
-double Quadrilateral::area_right_triangle(std::array<double, 2> a, std::array<double, 2> b_right, std::array<double, 2> c){
-    // 90 grad winkel liegt bei b_right
-    double dist = 0;
-    dist = (distance(a, b_right) * distance(a, c))/2;
-    return dist;
 }
