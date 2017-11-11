@@ -13,7 +13,9 @@ double Quad3D::surface() {
         int j = i%4;
         extra_surface += _thickness * distance(_quad.coord(i), _quad.coord(j));
     }
-    return 0;
+    double surface = extra_surface + 2 * _quad.area();
+
+    return surface;
 }
 double Quad3D::volume() {
     return _thickness * _quad.area();
