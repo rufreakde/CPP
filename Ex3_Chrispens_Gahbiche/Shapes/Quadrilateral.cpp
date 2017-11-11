@@ -3,22 +3,32 @@
 //
 
 #include <cmath>
+#include <utility>
 #include "Quadrilateral.h"
 
 //Constructors
 Quadrilateral::Quadrilateral(): Quad(){}
-Quadrilateral::Quadrilateral(std::string _Name,std::array<double,2> _Corner1, std::array<double,2> _Corner2, std::array<double,2> _Corner3, std::array<double,2> _Corner4) {
+Quadrilateral::Quadrilateral(std::string _Name,
+                             std::array<double,2> _Corner1,
+                             std::array<double,2> _Corner2,
+                             std::array<double,2> _Corner3,
+                             std::array<double,2> _Corner4) {
     _corners = {_Corner1, _Corner2, _Corner3, _Corner4};
-    _name = _Name;
+    _name = std::move(_Name);
 }
-Quadrilateral::~Quadrilateral(){}
+Quadrilateral::~Quadrilateral(){};
 Quad::~Quad(){};
 
 //functions~
 double Quadrilateral::circumference() {
-    double tCircumfence = 0;
+    auto a = _corners[0];
+    auto b = _corners[1];
+    auto c = _corners[2];
+    auto d = _corners[3];
 
-    return 0;
+    double tCircumfence = distance(a, b) + distance(b, c) + distance(c, d) + distance(d, a);
+
+    return tCircumfence;
 }
 
 double Quadrilateral::area() {
@@ -41,10 +51,6 @@ double Quadrilateral::area() {
     double a4 = distance(e, d) * distance(e, f);
 
     return a1 + a2 + a3 + a4;
-
-
-
-
 
 }
 
