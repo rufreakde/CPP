@@ -27,6 +27,17 @@ void Quad3D::setThickness(double _Thickness) {
     _thickness = _Thickness;
 }
 
+
+// constructors
+Quad3D::Quad3D(const Quadrilateral &_quad, double _thickness) :
+        _quad(_quad), _thickness(_thickness) {
+    std::cout << "used constructor with thickness" << std::endl;
+}
+Quad3D::Quad3D(const Quadrilateral &_quad) :
+        _quad(_quad) {
+    std::cout << "used constructor without thickness" << std::endl;
+}
+
 //operators QUAD2D
 Quad3D::Quad3D(const Quad &_Quad2D) {
     std::cout << "ERROR NOT IMPLEMENTED YET!" << std::endl;
@@ -48,24 +59,26 @@ Quad3D::Quad3D(Quad &&_Quad2D) {
 }
 
 //operators QUAD3D
+// copy constructor
 Quad3D::Quad3D(const Quad3D &_Quad3D) {
     _thickness = _Quad3D._thickness;
     _quad = _Quad3D._quad;
+    std::cout << "used copy constructor" << std::endl;
 }
 Quad3D &Quad3D::operator=(const Quad3D &_Quad3D) {
     _thickness = _Quad3D._thickness;
     _quad = _Quad3D._quad;
+    std::cout << "used copy assignment " << std::endl;
     return *this;
 }
 Quad3D &Quad3D::operator=(Quad3D &&_Quad3D) {
     _thickness = std::move(_Quad3D._thickness);
     _quad = std::move(_Quad3D._quad);
+    std::cout << "used move assignment " << std::endl;
     return *this;
 }
-Quad3D::Quad3D(Quad3D &&_Quad3D) {
-    _thickness = std::move(_Quad3D._thickness);
-    _quad = std::move(_Quad3D._quad);
+Quad3D::Quad3D(Quad3D &&_Quad3D) : _thickness{_Quad3D._thickness}, _quad{_Quad3D._quad} {
+    //_thickness = std::move(_Quad3D._thickness);
+    //_quad = std::move(_Quad3D._quad);
+    std::cout << "used move constructor" << std::endl;
 }
-
-Quad3D::Quad3D(const Quadrilateral &_quad, double _thickness) : _quad(_quad), _thickness(_thickness) {}
-Quad3D::Quad3D(const Quadrilateral &_quad) : _quad(_quad) {}

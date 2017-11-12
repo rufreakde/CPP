@@ -18,10 +18,6 @@
 using namespace std;
 
 
-template<typename T, typename... Args>
-std::unique_ptr<T> make_unique(Args&&... args) {
-    return std::unique_ptr<T>(new T(std::forward<Args>(args)...));
-}
 
 int main() {
 
@@ -36,11 +32,6 @@ int main() {
             std::unique_ptr<Quad>{new Parallelogram{"Parallelogram", {1,1}, {1,2}, {2,2}, {2,1}}},
             std::unique_ptr<Quad>{new IsoscelesTrapezoid{"IsoscelesTrapezoid", {1,1}, {1,2}, {2,2}, {2,1}}}
     };
-
-    for(int i=0; i< shapeVector.size(); i++){
-    *shapeVector[i];
-    //printNameCircumferenceArea calls all 3 interface functions internally!
-    }
 
     //3.1
     cout << "<!-- 3.1 --!>" << endl;
@@ -80,6 +71,8 @@ int main() {
     cout << "# Surface: " << moveShape.surface() << endl;
     cout << "# Volume: " << moveShape.volume() << endl;
 
+    // assign quad2D to quad3D ?? These are two different types
+    // why should we try this?
     Quad3D Square3D = *std::move( shapeVector[4].get() );
     Square3D.setThickness(10);
     cout << "# Square3D (= operator, move): " << &Square3D << endl;
@@ -91,6 +84,18 @@ int main() {
     cout << "# Quad3D (moved): " << &Parallelogram3D << endl;
     cout << "# Surface: " << Parallelogram3D.surface() << endl;
     cout << "# Volume: " << Parallelogram3D.volume() << endl;
+
+    // I suggest following for move assignments:
+    Quad3D parallelogram3D_org = Quad3D{Parallelogram{"Parallelogram", {0,2}, {2,2}, {2,0}, {0,0}}, 5};
+    Quad3D parallelogram3D_move {Parallelogram{"Parallelogram", {0,7}, {7,7}, {7,0}, {0,0}}, 7};
+    Quad3D parallelogram3D_copy {Parallelogram{"Parallelogram", {0,7}, {7,7}, {7,0}, {0,0}}, 7};
+    // try to use copy assignment
+    parallelogram3D_copy = parallelogram3D_org;
+    // try to use move assignment
+    parallelogram3D_move = std::move(parallelogram3D_org);
+    cout << "# Quad3D (moved): " << &parallelogram3D_move << endl;
+    cout << "# Surface: " << parallelogram3D_move.surface() << endl;
+    cout << "# Volume: " << parallelogram3D_move.volume() << endl;
 
     return 0;
 }
