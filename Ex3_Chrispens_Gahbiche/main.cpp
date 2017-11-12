@@ -14,6 +14,8 @@
 #include "./shapes/Trapezoid.h"
 
 #include "./shapes/Quad3D.h"
+#include "Shapes/SpecializedRectangle.h"
+#include "Shapes/SpecializedSquare.h"
 
 using namespace std;
 
@@ -96,6 +98,21 @@ int main() {
     cout << "# Quad3D (moved): " << &parallelogram3D_move << endl;
     cout << "# Surface: " << parallelogram3D_move.surface() << endl;
     cout << "# Volume: " << parallelogram3D_move.volume() << endl;
+
+
+    //3.5
+    cout << "<!-- 3.5 --!>" << endl;
+    SpecializedRectangle specRectangle{{3,3}, {8,3}, 2};
+    specRectangle.printNameCircumferenceArea();
+    std::cout << specRectangle.coord(2)[0] << "\t"  << specRectangle.coord(2)[1] << std::endl;
+    std::cout << specRectangle.coord(3)[0] << "\t"  << specRectangle.coord(3)[1] << std::endl;
+
+    SpecializedSquare specSquare{{3,3}, {6,3}};
+    specSquare.printNameCircumferenceArea();
+    //std::cout << specSquare.coord(2)[0] << "\t"  << specSquare.coord(2)[1] << std::endl;
+    //std::cout << specSquare.coord(3)[0] << "\t"  << specSquare.coord(3)[1] << std::endl;
+
+
 
     return 0;
 }
