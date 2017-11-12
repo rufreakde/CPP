@@ -66,3 +66,6 @@ Quad3D::Quad3D(Quad3D &&_Quad3D) {
     _thickness = std::move(_Quad3D._thickness);
     _quad = std::move(_Quad3D._quad);
 }
+
+Quad3D::Quad3D(const Quadrilateral &_quad, double _thickness) : _quad(_quad), _thickness(_thickness) {}
+Quad3D::Quad3D(const Quadrilateral &_quad) : _quad(_quad) {}

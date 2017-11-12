@@ -29,6 +29,11 @@ public:
     double volume();
     void setThickness(double _Thickness);
 
+    // constructors
+    Quad3D(const Quadrilateral &_quad, double _thickness);
+    Quad3D(const Quadrilateral &_quad);
+
+
     Quad3D(const Quad &_Quad2D);
     Quad3D &operator=(const Quad &_Quad2D);
     Quad3D &operator=(Quad &&_Quad2D);

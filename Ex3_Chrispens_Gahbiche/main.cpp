@@ -64,7 +64,7 @@ int main() {
 
     //3.3
     cout << "<!-- 3.3 --!>" << endl;
-    Quad3D quadrilateral3D = Quadrilateral{{"Quadrilateral"}, {0,2}, {2,2}, {2,0}, {0,0}};
+    Quad3D quadrilateral3D {Quadrilateral{{"Quadrilateral"}, {0,2}, {2,2}, {2,0}, {0,0}}};
     cout << "# Quad3D: "  << &quadrilateral3D << endl;
     quadrilateral3D.setThickness(5);
     cout << "# Surface: " << quadrilateral3D.surface() << endl;
