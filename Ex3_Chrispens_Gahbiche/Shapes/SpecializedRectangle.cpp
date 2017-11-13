@@ -10,6 +10,7 @@ SpecializedRectangle::SpecializedRectangle(const std::array<double, 2> _corner1,
                                            double length)
                                             : _length (length){
     _corners = {_corner1, _corner2};
+    _name = "Specialized Rectangle";
 }
 
 
