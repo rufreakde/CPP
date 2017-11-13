@@ -13,7 +13,6 @@ SpecializedRectangle::SpecializedRectangle(const std::array<double, 2> _corner1,
 }
 
 
-
 std::array<double, 2> SpecializedRectangle::coord(int i) {
     if (i > 3 || i < 0) {
         throw std::out_of_range("Please choose a coordinate in the Range 0 - 3");

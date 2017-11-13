@@ -34,6 +34,7 @@ std::array<double, 2> SpecializedSquare::coord(int i) {
     }
 }
 
+
 SpecializedSquare::SpecializedSquare(const std::array<double, 2> &_corner1, const std::array<double, 2> &_corner2){
     _corners = {_corner1, _corner2};
 }
