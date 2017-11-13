@@ -12,3 +12,11 @@ Rectangle::Rectangle(std::string _Name,std::array<double,2> _Corner1, std::array
     _corners = {_Corner1, _Corner2, _Corner3, _Corner4};
     _name = _Name;
 }
+
+void Rectangle::subdivide() {
+    _subdivide();
+}
+
+void Rectangle::_subdivide() {
+    Parallelogram::_subdivide<Rectangle>();
+}

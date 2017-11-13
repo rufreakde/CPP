@@ -13,7 +13,7 @@
 class SpecializedRectangle : public Parallelogram{
 public:
     // constructor
-    SpecializedRectangle(const std::array<double, 2> _corner1, const std::array<double, 2> _corner2,
+    SpecializedRectangle(std::array<double, 2> _corner1, std::array<double, 2> _corner2,
                          double _length);
 
     SpecializedRectangle();
