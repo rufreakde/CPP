@@ -22,8 +22,8 @@ std::array<double, 2> SpecializedRectangle::coord(int i) {
     } else if (i == 2){
         double ab = distance(_corners[0], _corners[1]);
         // unit vector
-        std::array<double, 2> V {_corners[1][1]-_corners[0][1], _corners[1][0] - _corners[0][0]};
-        double V_len = distance(_corners[0], V);
+        std::array<double, 2> V {_corners[1][0]-_corners[0][0], _corners[1][1] - _corners[0][1]};
+        double V_len = sqrt(V[0]*V[0] + V[1]*V[1]);
         //normalize
         V[0] /= V_len; V[1] /= V_len;
         // rotate by -90

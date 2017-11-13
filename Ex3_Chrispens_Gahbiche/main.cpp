@@ -102,15 +102,15 @@ int main() {
 
     //3.5
     cout << "<!-- 3.5 --!>" << endl;
-    SpecializedRectangle specRectangle{{3,3}, {8,3}, 2};
+    SpecializedRectangle specRectangle{{3,3}, {6,3}, 2};
     specRectangle.printNameCircumferenceArea();
     std::cout << specRectangle.coord(2)[0] << "\t"  << specRectangle.coord(2)[1] << std::endl;
     std::cout << specRectangle.coord(3)[0] << "\t"  << specRectangle.coord(3)[1] << std::endl;
 
     SpecializedSquare specSquare{{3,3}, {6,3}};
     specSquare.printNameCircumferenceArea();
-    //std::cout << specSquare.coord(2)[0] << "\t"  << specSquare.coord(2)[1] << std::endl;
-    //std::cout << specSquare.coord(3)[0] << "\t"  << specSquare.coord(3)[1] << std::endl;
+    std::cout << specSquare.coord(2)[0] << "\t"  << specSquare.coord(2)[1] << std::endl;
+    std::cout << specSquare.coord(3)[0] << "\t"  << specSquare.coord(3)[1] << std::endl;
 
 
 
