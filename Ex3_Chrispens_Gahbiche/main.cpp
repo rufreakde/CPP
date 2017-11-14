@@ -35,6 +35,8 @@ int main() {
             std::unique_ptr<Quad>{new IsoscelesTrapezoid{"IsoscelesTrapezoid", {-2,2}, {2,2}, {4,0}, {-4,0}}}
     };
 
+    std::unique_ptr<Quad> k = std::make_unique("", std::array<std::array<double,2>,4>{{{1, 1}, {1, 2}, {2, 2}, {2, 1}}});
+
     //3.1
     cout << "<!-- 3.1 --!>" << endl;
     for (auto &shape : shapeVector) {
