@@ -1,6 +1,6 @@
 #include <iostream>
-#include <memory>
 #include "Polygon.h"
+#include "Point.h"
 
 int main() {
     /*
