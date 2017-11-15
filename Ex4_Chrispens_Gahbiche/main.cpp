@@ -27,7 +27,7 @@ int main() {
     Point C = Point{4,4};
     C.print();
 
-    Polygon<4> polygon2 {std::array<std::array<double,2>,4>{{{0,0}, {0,2}, {2,2}, {0,2}}}};
+    Polygon<4> polygon2 {std::array<Point ,4>{{{0,0}, {0,2}, {2,2}, {0,2}}}};
     polygon2.printNameCircumferenceArea();
 
     return 0;

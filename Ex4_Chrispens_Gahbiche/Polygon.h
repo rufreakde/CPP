@@ -26,9 +26,9 @@ public:
 
         double tCircumfence = 0;
         for (std::size_t i = 0; i+1 != _corners.size(); ++i) {
-            tCircumfence += distance(_corners[i], _corners[i+1]);
+            tCircumfence += _corners[i].distance_to(_corners[i+1]);
         }
-        tCircumfence += distance(_corners[_corners.size() -1], _corners[0]);
+        tCircumfence += _corners[_corners.size() -1].distance_to( _corners[0]);
 
         //double tCircumfence = distance(a, b) + distance(b, c) + distance(c, d) + distance(d, a);
 
