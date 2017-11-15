@@ -10,9 +10,12 @@ int main() {
         square { {0,0}, {4,-2}, {6,2}, {2,4} }.
      */
 
-    std::unique_ptr<Polygon<8>> octagon = std::make_unique<Polygon<8>>(std::array<std::array<double,2>,8>{{{0,0}, {2,-1}, {4,-2}, {5,0}, {6,2}, {4,3}, {2,4}, {1,2}}});
-    auto oct = octagon.get();
-    oct->printNameCircumferenceArea();
+    //std::unique_ptr<Polygon<8>> octagon = std::make_unique<Polygon<8>>(std::array<std::array<double,2>,8>{{{0,0}, {2,-1}, {4,-2}, {5,0}, {6,2}, {4,3}, {2,4}, {1,2}}});
+    //auto oct = octagon.get();
+    //oct->printNameCircumferenceArea();
+
+    Polygon<8> polygon {std::array<std::array<double,2>,8>{{{0,0}, {2,-1}, {4,-2}, {5,0}, {6,2}, {4,3}, {2,4}, {1,2}}}};
+    polygon.printNameCircumferenceArea();
 
     return 0;
 }
