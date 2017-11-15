@@ -29,10 +29,8 @@ public:
             tCircumfence += _corners[i].distance_to(_corners[i+1]);
         }
         tCircumfence += _corners[_corners.size() -1].distance_to( _corners[0]);
-
-        //double tCircumfence = distance(a, b) + distance(b, c) + distance(c, d) + distance(d, a);
-
         return tCircumfence;
+
     };
     double area(){
         /*

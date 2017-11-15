@@ -28,7 +28,7 @@ Point Point::operator-(const Point &rhs) {
 }
 
 double Point::distance_to(const Point &rhs) {
-    return std::sqrt( pow(this->x+rhs.x, 2) + pow(this->y + rhs.y, 2) );
+    return std::sqrt( pow(x - rhs.x, 2) + pow(y - rhs.y, 2) );
 }
 
 Point &Point::operator=(const Point &rhs) {
