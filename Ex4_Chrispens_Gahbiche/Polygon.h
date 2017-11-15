@@ -7,18 +7,18 @@
 
 #include <array>
 
-template<int T>
+template<int N>
 class Polygon {
 protected:
-    int N;
-    std::array<std::array<double,2>,T> _corners;
+    std::array<std::array<double,2>,N> _corners;
     std::string _name;
 
 public:
-    Polygon() = delete;
-    Polygon(std::string _Name,
-                  std::array<std::array<double,2>,T>);
-    ~Polygon();
+    Polygon();
+
+    Polygon(std::array<std::array<double,2>,N> _Corners);
+
+    ~Polygon() = default;
 
     double circumference();
     double area();
@@ -28,6 +28,8 @@ public:
     void printNameCircumferenceArea();
 
     double distance(std::array<double, 2> x, std::array<double, 2> y);
+
+    Polygon<N>& operator=(std::initializer_list<int>& list);
 };
 
 
