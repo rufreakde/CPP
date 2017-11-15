@@ -1,6 +1,6 @@
 #include <iostream>
-#include <memory>
 #include "Polygon.h"
+#include "Point.h"
 
 int main() {
     /*
@@ -14,7 +14,7 @@ int main() {
     //auto oct = octagon.get();
     //oct->printNameCircumferenceArea();
 
-    Polygon<8> polygon {std::array<std::array<double,2>,8>{{{0,0}, {2,-1}, {4,-2}, {5,0}, {6,2}, {4,3}, {2,4}, {1,2}}}};
+    Polygon<8> polygon {std::array<Point ,8>{{{0,0}, {2,-1}, {4,-2}, {5,0}, {6,2}, {4,3}, {2,4}, {1,2}}}};
     polygon.printNameCircumferenceArea();
 
     Polygon<4> polygon2 {std::array<std::array<double,2>,4>{{{0,0}, {0,2}, {2,2}, {0,2}}}};

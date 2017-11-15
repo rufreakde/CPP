@@ -4,17 +4,18 @@
 #include <array>
 #include <cmath>
 #include <iostream>
+#include "Point.h"
 
 template<int N>
 class Polygon {
 protected:
-    std::array<std::array<double,2>, N> _corners;
+    std::array<Point, N> _corners;
     std::string _name;
 
 public:
     Polygon();
 
-    explicit Polygon(std::array<std::array<double,2>, N> _Corners) : _corners(_Corners) {
+    explicit Polygon(std::array<Point, N> _Corners) : _corners(_Corners) {
             _name = std::to_string(N) + "-gon";
         std::cout << std::to_string(N) << std::endl;
     }
@@ -34,6 +35,7 @@ public:
         return tCircumfence;
     };
     double area(){
+        /*
 
         double area = 0.0f;
         for (int i = 0; i < _corners.size() - 1; ++i)
@@ -43,6 +45,7 @@ public:
 
         area = abs(area) / 2.0f;
         return area;
+         */
 
         /*double area = 0.0f;
         for (int i = 0; i < _corners.size() - 1; ++i)
@@ -68,10 +71,6 @@ public:
         std::cout << "# Circumference:\t" << this->circumference() << std::endl;
         std::cout << "# Area:\t\t" << this->area() << std::endl;
         std::cout << "############################" << std::endl;
-    };
-
-    double distance(std::array<double, 2> x, std::array<double, 2> y){
-        return std::sqrt(pow( x[0] - y[0] ,2) + pow( x[1] - y[1] ,2));
     };
 
     Polygon<N>& operator=(std::initializer_list<int>& list){
