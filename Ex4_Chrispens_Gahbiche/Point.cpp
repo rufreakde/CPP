@@ -3,6 +3,7 @@
 //
 
 #include <cmath>
+#include <iostream>
 #include "Point.h"
 
 Point::Point(double x, double y) : x(x), y(y) {}
@@ -28,6 +29,15 @@ Point Point::operator-(const Point &rhs) {
 
 double Point::distance_to(const Point &rhs) {
     return std::sqrt( pow(this->x+rhs.x, 2) + pow(this->y + rhs.y, 2) );
+}
+
+Point &Point::operator=(const Point &rhs) {
+    this->x = rhs.x;
+    this->y = rhs.y;
+}
+
+void Point::print() {
+    std::cout << x << "\t" << y << std::endl;
 }
 
 

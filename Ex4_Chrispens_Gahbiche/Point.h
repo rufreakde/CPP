@@ -11,6 +11,8 @@ public:
     Point(double x, double y);
     Point();
 
+    Point& operator=(const Point&);
+
     bool operator==(const Point &rhs) const;
 
     bool operator!=(const Point &rhs) const;
@@ -19,6 +21,9 @@ public:
     Point operator-(const Point &rhs);
 
     double distance_to(const Point &rhs);
+
+    void print();
+
 
     double x = 0;
     double y = 0;
