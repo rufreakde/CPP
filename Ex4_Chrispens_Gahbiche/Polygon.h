@@ -3,6 +3,7 @@
 
 #include <array>
 #include <cmath>
+#include <iostream>
 
 template<int N>
 class Polygon {
@@ -15,6 +16,7 @@ public:
 
     explicit Polygon(std::array<std::array<double,2>, N> _Corners) : _corners(_Corners) {
             _name = std::to_string(N) + "-gon";
+        std::cout << std::to_string(N) << std::endl;
     }
 
     ~Polygon() = default;
@@ -23,15 +25,21 @@ public:
 
 
         //double tCircumfence = distance(a, b) + distance(b, c) + distance(c, d) + distance(d, a);
-
-        std::cout << "NOT IMPLEMENTED YET! - circumference()" << std::endl;
-        double tCircumfence = 0;
+        double tCircumfence = -1;
         return tCircumfence;
     };
     double area(){
-        /*
-        double area = 0.0f;
 
+        double area = 0.0f;
+        for (int i = 0; i < _corners.size() - 1; ++i)
+            area += _corners[i][0] * _corners[i+1][1] - _corners[i+1][0] * _corners[i][1];
+
+        area += _corners[_corners.size()-1][0] * _corners[0][1] - _corners[0][0] * _corners[_corners.size()-1][1];
+
+        area = abs(area) / 2.0f;
+        return area;
+
+        /*double area = 0.0f;
         for (int i = 0; i < _corners.size() - 1; ++i)
             area += _corners[i].x * _corners[i+1].y - _corners[i+1].x * _corners[i].y;
 
