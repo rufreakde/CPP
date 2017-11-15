@@ -20,10 +20,7 @@ public:
     ~Polygon() = default;
 
     double circumference(){
-        //auto a = _corners[0];
-        //auto b = _corners[1];
-        //auto c = _corners[2];
-        //auto d = _corners[3];
+
 
         //double tCircumfence = distance(a, b) + distance(b, c) + distance(c, d) + distance(d, a);
 

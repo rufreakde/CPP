@@ -5,5 +5,5 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++14")
 set(CMAKE_CXX_STANDARD 14)
 set(CXX_STANDARD_REQUIRED ON)
 
-set(SOURCE_FILES main.cpp Polygon.cpp Polygon.h)
+set(SOURCE_FILES main.cpp Polygon.h Point.cpp Point.h)
 add_executable(Ex4 ${SOURCE_FILES})
