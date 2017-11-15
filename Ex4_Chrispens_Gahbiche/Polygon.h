@@ -3,17 +3,20 @@
 
 #include <array>
 #include <cmath>
-#include "Point.h"
+#include <iostream>
 
 template<int N>
 class Polygon {
 protected:
-    std::array<Point, N> _corners;
+    std::array<std::array<double,2>, N> _corners;
     std::string _name;
 
 public:
-    explicit Polygon(std::array<Point, N> _Corners) : _corners(_Corners) {
+    Polygon();
+
+    explicit Polygon(std::array<std::array<double,2>, N> _Corners) : _corners(_Corners) {
             _name = std::to_string(N) + "-gon";
+        std::cout << std::to_string(N) << std::endl;
     }
 
     ~Polygon() = default;
@@ -22,15 +25,21 @@ public:
 
 
         //double tCircumfence = distance(a, b) + distance(b, c) + distance(c, d) + distance(d, a);
-
-        std::cout << "NOT IMPLEMENTED YET! - circumference()" << std::endl;
-        double tCircumfence = 0;
+        double tCircumfence = -1;
         return tCircumfence;
     };
     double area(){
-        /*
-        double area = 0.0f;
 
+        double area = 0.0f;
+        for (int i = 0; i < _corners.size() - 1; ++i)
+            area += _corners[i][0] * _corners[i+1][1] - _corners[i+1][0] * _corners[i][1];
+
+        area += _corners[_corners.size()-1][0] * _corners[0][1] - _corners[0][0] * _corners[_corners.size()-1][1];
+
+        area = abs(area) / 2.0f;
+        return area;
+
+        /*double area = 0.0f;
         for (int i = 0; i < _corners.size() - 1; ++i)
             area += _corners[i].x * _corners[i+1].y - _corners[i+1].x * _corners[i].y;
 
@@ -54,6 +63,10 @@ public:
         std::cout << "# Circumference:\t" << this->circumference() << std::endl;
         std::cout << "# Area:\t\t" << this->area() << std::endl;
         std::cout << "############################" << std::endl;
+    };
+
+    double distance(std::array<double, 2> x, std::array<double, 2> y){
+        return std::sqrt(pow( x[0] - y[0] ,2) + pow( x[1] - y[1] ,2));
     };
 
     Polygon<N>& operator=(std::initializer_list<int>& list){
