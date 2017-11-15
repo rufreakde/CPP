@@ -17,6 +17,10 @@ int main() {
     Polygon<8> polygon {std::array<Point ,8>{{{0,0}, {2,-1}, {4,-2}, {5,0}, {6,2}, {4,3}, {2,4}, {1,2}}}};
     polygon.printNameCircumferenceArea();
 
+    Polygon<4> polygon2 {std::array<Point ,4>{{{0,0}, {0,2}, {2,2}, {0,2}}}};
+    polygon2.printNameCircumferenceArea();
+
+
     Point A{0,0};
     A.print();
     Point B{1,1};
@@ -25,10 +29,9 @@ int main() {
     A = B;
     A.print();
     Point C = Point{4,4};
+    Point D = Point{1,1};
     C.print();
-
-    Polygon<4> polygon2 {std::array<Point ,4>{{{0,0}, {0,2}, {2,2}, {0,2}}}};
-    polygon2.printNameCircumferenceArea();
+    std::cout << A.distance_to(B) << std::endl;
 
     return 0;
 }
