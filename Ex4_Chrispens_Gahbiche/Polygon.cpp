@@ -37,29 +37,15 @@ double Polygon<N>::circumference() {
 
 template <int N>
 double Polygon<N>::area() {
-    // we use Bretschneider's formula
-    // wikipedia.org/wiki/Bretschneider%27s_formula
-/*
-    auto A = _corners[0];
-    auto B = _corners[1];
-    auto C = _corners[2];
-    auto D = _corners[3];
 
-    // edges
-    double a = distance(A, B);
-    double b = distance(B, C);
-    double c = distance(C, D);
-    double d = distance(D, A);
+    double area = 0.0f;
 
-    // diagonals
-    double e = distance(A, C);
-    double f = distance(D, B);
+    for (int i = 0; i < _corners.size() - 1; ++i)
+        area += _corners[i].x * _corners[i+1].y - _corners[i+1].x * _corners[i].y;
 
-    double area = 0.25 * std::sqrt(4*e*e*f*f -
-                                  std::pow((b*b +d*d - a*a - c*c),2));*/
+    area += _corners[_corners.size()-1].x * _corners[0].y - _corners[0].x * _corners[_corners.size()-1].y;
 
-    std::cout << "NOT IMPLEMENTED YET! - area()" << std::endl;
-    double area = 0;
+    area = abs(area) / 2.0f;
     return area;
 
 }
