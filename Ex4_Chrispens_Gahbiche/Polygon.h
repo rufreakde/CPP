@@ -25,7 +25,7 @@ public:
     double circumference(){
 
         double tCircumfence = 0;
-        for (std::size_t i = 0; i+1 != _corners.size(); ++i) {
+        for (std::size_t i = 0; i != _corners.size() - 1; ++i) {
             tCircumfence += _corners[i].distance_to(_corners[i+1]);
         }
         tCircumfence += _corners[_corners.size() -1].distance_to( _corners[0]);
@@ -33,26 +33,14 @@ public:
 
     };
     double area(){
-        /*
-
         double area = 0.0f;
         for (int i = 0; i < _corners.size() - 1; ++i)
-            area += _corners[i][0] * _corners[i+1][1] - _corners[i+1][0] * _corners[i][1];
+            area += (_corners[i].x * _corners[i+1].y) - (_corners[i+1].x * _corners[i].y);
 
-        area += _corners[_corners.size()-1][0] * _corners[0][1] - _corners[0][0] * _corners[_corners.size()-1][1];
+        //area += _corners[_corners.size()-1].x * _corners[0].y - _corners[0].x * _corners[_corners.size()-1].y;
 
-        area = abs(area) / 2.0f;
+        area = fabs(area) * 0.5f;
         return area;
-         */
-
-        /*double area = 0.0f;
-        for (int i = 0; i < _corners.size() - 1; ++i)
-            area += _corners[i].x * _corners[i+1].y - _corners[i+1].x * _corners[i].y;
-
-        area += _corners[_corners.size()-1].x * _corners[0].y - _corners[0].x * _corners[_corners.size()-1].y;
-
-        area = abs(area) / 2.0f;
-        return area;*/
     };
     std::array<double,2> coord(int _Number){
         if (_Number >= _corners.size() || _Number < 0) {
