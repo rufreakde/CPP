@@ -17,5 +17,15 @@ int main() {
     Polygon<8> polygon {std::array<Point ,8>{{{0,0}, {2,-1}, {4,-2}, {5,0}, {6,2}, {4,3}, {2,4}, {1,2}}}};
     polygon.printNameCircumferenceArea();
 
+    Point A{0,0};
+    A.print();
+    Point B{1,1};
+    B.print();
+    //copy assignment
+    A = B;
+    A.print();
+    Point C = Point{4,4};
+    C.print();
+
     return 0;
 }
