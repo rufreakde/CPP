@@ -27,4 +27,5 @@ double sum_circumference(std::initializer_list<T> lst){
     return sum;
 }
 
+
 #endif //EX4_CHRISPENS_GAHBICHE_SUM_CIRCUMFERENCE_H

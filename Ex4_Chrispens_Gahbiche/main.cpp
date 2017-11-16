@@ -51,6 +51,5 @@ int main() {
     std::cout << "sum_circ of first two triangles and last two hexagons using variadic templates" << std::endl <<
               sum_circumference(triangles[0], triangles[1], hexagons[2], hexagons[3]) << std::endl;
 
-
     return 0;
 }
