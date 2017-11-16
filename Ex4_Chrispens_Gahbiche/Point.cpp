@@ -8,7 +8,10 @@
 
 Point::Point(double x, double y) : x(x), y(y) {}
 
-Point::Point() {}
+Point::Point() {
+    x = rand() % 10;
+    y = rand() % 10;
+}
 
 bool Point::operator==(const Point &rhs) const {
     return x == rhs.x &&
@@ -34,10 +37,15 @@ double Point::distance_to(const Point &rhs) {
 Point &Point::operator=(const Point &rhs) {
     this->x = rhs.x;
     this->y = rhs.y;
+    return *this;
 }
 
 void Point::print() {
     std::cout << x << "\t" << y << std::endl;
+}
+
+const Point Point::midsegment_to(const Point &rhs) {
+    return Point{(x+rhs.x)/2, (y+rhs.y)/2};
 }
 
 

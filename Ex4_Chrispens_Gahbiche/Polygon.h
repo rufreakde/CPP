@@ -13,11 +13,10 @@ protected:
     std::string _name;
 
 public:
-    Polygon();
+    Polygon() {}
 
     explicit Polygon(std::array<Point, N> _Corners) : _corners(_Corners) {
             _name = std::to_string(N) + "-gon";
-        std::cout << std::to_string(N) << std::endl;
     }
 
     ~Polygon() = default;
@@ -42,9 +41,11 @@ public:
         area = fabs(area) * 0.5f;
         return area;
     };
-    std::array<double,2> coord(int _Number){
+    Point coord(int _Number){
         if (_Number >= _corners.size() || _Number < 0) {
             throw std::out_of_range("Please choose a coordinate in the Range");
+        } else {
+            return _corners[_Number];
         }
     };
     std::string name(){

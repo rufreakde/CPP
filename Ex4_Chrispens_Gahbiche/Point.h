@@ -22,6 +22,8 @@ public:
 
     double distance_to(const Point &rhs);
 
+    const Point midsegment_to(const Point &rhs);
+
     void print();
 
 
