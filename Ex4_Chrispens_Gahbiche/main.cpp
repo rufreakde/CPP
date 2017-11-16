@@ -44,15 +44,12 @@ int main() {
     }
 
     std::cout << "sum_circ of hexagons:  using init_list: " << std::endl <<
-              sum_circumference_lst({triangles[0], triangles[1], triangles[2], triangles[3]}) << std::endl;
+              sum_circumference({triangles[0], triangles[1], triangles[2], triangles[3]}) << std::endl;
     std::cout << "sum_circ of hexagons:  using init_list: " << std::endl <<
-              sum_circumference_lst({hexagons[0], hexagons[1], hexagons[2], hexagons[3]}) << std::endl;
+              sum_circumference({hexagons[0], hexagons[1], hexagons[2], hexagons[3]}) << std::endl;
 
     std::cout << "sum_circ of first two triangles and last two hexagons using variadic templates" << std::endl <<
               sum_circumference(triangles[0], triangles[1], hexagons[2], hexagons[3]) << std::endl;
-
-
-
 
 
     return 0;

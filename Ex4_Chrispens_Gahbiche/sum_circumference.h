@@ -19,7 +19,7 @@ double sum_circumference(T head, Tail... tail){
 
 
 template <typename T>
-double sum_circumference_lst(std::initializer_list<T> lst){
+double sum_circumference(std::initializer_list<T> lst){
     double sum = 0;
     for (auto elm : lst){
         sum += elm.circumference();
