@@ -66,5 +66,10 @@ int main() {
               result_trafo_red_hexagons[0] << "\t" << result_trafo_red_hexagons[1] << "\t" << result_trafo_red_hexagons[2] << std::endl;
 
 
+    double result_trafo_variadic = transform_reduce(triangles[0], triangles[1], triangles[2], triangles[3]);
+    std::cout << "transform_reduce using init_list: " << std::endl <<
+              result_trafo_variadic;// << "\t" << result_trafo_variadic[1] << "\t" << result_trafo_variadic[2] << std::endl;
+
+
     return 0;
 }

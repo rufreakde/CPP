@@ -31,7 +31,7 @@ std::array<double, 3> transform_reduce(std::initializer_list<T> lst){
         summe += elm.circumference() ;
     };
 
-    auto get_nb = [&counter](T &elm, double threshold) {
+    auto get_nb = [](T &elm, double threshold) {
         int elm_counter=0;
         for (size_t i = 0; i < elm.size(); i++) {
             size_t j = (i+1) % elm.size();
@@ -56,5 +56,41 @@ std::array<double, 3> transform_reduce(std::initializer_list<T> lst){
     return std::array<double, 3> {summe, geom_mean, counter};
 
 }
+
+
+/*template <typename T>
+double sum_circumference(T arg){
+    return arg.circumference();
+}
+
+template <typename T, typename... Tail>
+double sum_circumference(T head, Tail... tail){
+    return head.circumference() + sum_circumference(tail...);
+}
+
+ */
+
+template<typename T>
+double transform_reduce(T polygon){
+    auto get_nb = [](T &elm, double threshold) {
+        int elm_counter=0;
+        for (size_t i = 0; i < elm.size(); i++) {
+            size_t j = (i+1) % elm.size();
+            if (elm.coord(i).distance_to(elm.coord(j)) > threshold) { elm_counter++; }
+        }
+        return elm_counter;
+    };
+    double test = get_nb(polygon, 2.);
+    return test;
+};
+
+template <typename T, typename... Tail>
+double transform_reduce(T head, Tail... tail){
+    double counter = transform_reduce(head);
+    return counter + transform_reduce(tail...);
+
+
+};
+
 
 #endif //EX4_CHRISPENS_GAHBICHE_TRANSFORM_REDUCE_H
