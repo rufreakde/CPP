@@ -23,24 +23,22 @@ std::array<double, 3> transform_reduce(std::initializer_list<T> lst){
 
     auto add = [=](double &a, const double &b){return a+b;};
     double summe =0;
-    for(auto elm: lst) {
-        [&summe](T &elm) { summe += elm.circumference(); };
-    }
     double counter =0;
+    double geom_mean = 0;
+    double threshold = 0;
     for(auto elm: lst) {
+        [&summe](T &elm) { summe += elm.circumference();
+        };
         [&counter](T &elm, double threshold) {
             for (size_t i = 0; i < elm.size(); i++) {
                 size_t j = i % elm.size();
                 if (elm._corners[i].distance_to(elm._corners[j]) > threshold) { counter++; }
             }
         };
-    };
-    double geom_mean = 0;
-    for(auto elm :lst) {
         [&geom_mean](T &elm) {
             geom_mean *= elm.area();
         };
-    };
+    }
     geom_mean = pow(geom_mean, 1/lst.size());
 
     return std::array<double, 3> {summe, geom_mean, counter};
