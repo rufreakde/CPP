@@ -15,10 +15,11 @@ Let us generalize the function sum_circumference() to transform_reduce(), which 
 
 #include <initializer_list>
 #include <cmath>
+#include <array>
 
 
 template<typename T>
-double transform_reduce(std::initializer_list<T> lst){
+std::array<double, 3> transform_reduce(std::initializer_list<T> lst){
 
     auto add = [=](double &a, const double &b){return a+b;};
     double summe =0;
@@ -42,7 +43,7 @@ double transform_reduce(std::initializer_list<T> lst){
     };
     geom_mean = pow(geom_mean, 1/lst.size());
 
-    return summe;
+    return std::array<double, 3> {summe, geom_mean, counter};
 
 }
 
