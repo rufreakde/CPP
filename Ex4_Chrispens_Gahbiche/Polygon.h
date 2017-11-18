@@ -65,6 +65,7 @@ public:
         return *this;
     };
 
+protected:
     std::array<Point, N> _corners;
     std::string _name;
 };
