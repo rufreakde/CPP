@@ -61,6 +61,10 @@ int main() {
     std::cout << "transform_reduce using init_list: " << std::endl <<
               result_trafo_red[0] << "\t" << result_trafo_red[1] << "\t" << result_trafo_red[2] << std::endl;
 
+    std::array<double, 3> result_trafo_red_hexagons = transform_reduce({hexagons[0], hexagons[1], hexagons[2], hexagons[3]});
+    std::cout << "transform_reduce using init_list: " << std::endl <<
+              result_trafo_red_hexagons[0] << "\t" << result_trafo_red_hexagons[1] << "\t" << result_trafo_red_hexagons[2] << std::endl;
+
 
     return 0;
 }

@@ -29,13 +29,12 @@ public:
 
     };
     double area(){
-        double area = 0.0f;
+        double area = 0.0;
         for (int i = 0; i < _corners.size() - 1; ++i)
             area += (_corners[i].x * _corners[i+1].y) - (_corners[i+1].x * _corners[i].y);
+        area += _corners[_corners.size()-1].x * _corners[0].y - _corners[0].x * _corners[_corners.size()-1].y;
 
-        //area += _corners[_corners.size()-1].x * _corners[0].y - _corners[0].x * _corners[_corners.size()-1].y;
-
-        area = fabs(area) * 0.5f;
+        area = fabs(area) * 0.5;
         return area;
     };
     Point coord(int _Number){
