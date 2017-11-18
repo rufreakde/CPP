@@ -15,34 +15,35 @@ Let us generalize the function sum_circumference() to transform_reduce(), which 
 
 #include <initializer_list>
 #include <cmath>
-#include <algorithm>
 
-/*
+
 template<typename T>
 double transform_reduce(std::initializer_list<T> lst){
 
     auto add = [=](double &a, const double &b){return a+b;};
-    double sum =0;
-    std::for_each(lst.begin(), lst.end(), [&sum](T &elm){sum += elm.circumference();});
+    double summe =0;
+    for(auto elm: lst) {
+        [&summe](T &elm) { summe += elm.circumference(); };
+    }
     double counter =0;
-    std::for_each(lst.begin(), lst.end(),
-                  [&counter](T &elm, double threshold) {
-                      for (size_t i = 0; i < elm.size(); i++) {
-                          size_t j = i % elm.size();
-                          if (elm._corners[i].distance_to(elm._coreners[j]) > threshold) { counter++; }
-                      }
-                  }
-    );
+    for(auto elm: lst) {
+        [&counter](T &elm, double threshold) {
+            for (size_t i = 0; i < elm.size(); i++) {
+                size_t j = i % elm.size();
+                if (elm._corners[i].distance_to(elm._corners[j]) > threshold) { counter++; }
+            }
+        };
+    };
     double geom_mean = 0;
-    std::for_each(lst.begin(), lst.end(),
-                  [geom_mean](T &elm){
-                      geom_mean *=  elm.area();
-                  }
-    );
+    for(auto elm :lst) {
+        [&geom_mean](T &elm) {
+            geom_mean *= elm.area();
+        };
+    };
     geom_mean = pow(geom_mean, 1/lst.size());
 
-
+    return summe;
 
 }
-*/
+
 #endif //EX4_CHRISPENS_GAHBICHE_TRANSFORM_REDUCE_H

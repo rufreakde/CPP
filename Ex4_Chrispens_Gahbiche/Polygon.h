@@ -8,9 +8,6 @@
 
 template<int N>
 class Polygon {
-protected:
-    std::array<Point, N> _corners;
-    std::string _name;
 
 public:
     Polygon() {}
@@ -52,6 +49,10 @@ public:
         return _name;
     };
 
+    int size(){
+        return N;
+    }
+
     void printNameCircumferenceArea(){
         std::cout << "############################" << std::endl;
         std::cout << "# Name:\t\t" << name() << std::endl;
@@ -63,6 +64,9 @@ public:
     Polygon<N>& operator=(std::initializer_list<int>& list){
         return *this;
     };
+
+    std::array<Point, N> _corners;
+    std::string _name;
 };
 
 

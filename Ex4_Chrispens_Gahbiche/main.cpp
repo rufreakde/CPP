@@ -55,9 +55,9 @@ int main() {
 
     std::cout << std::endl << std::endl;
     // 4.3
-//    std::cout << "<----------- 4.3 ----------->" << std::endl;
-//    std::cout << "sum_circ of triangles:  using init_list: " << std::endl <<
-//              transform_reduce({triangles[0], triangles[1], triangles[2], triangles[3]}) << std::endl;
+    std::cout << "<----------- 4.3 ----------->" << std::endl;
+    std::cout << "sum_circ of triangles:  using init_list: " << std::endl <<
+              transform_reduce({triangles[0], triangles[1], triangles[2], triangles[3]}) << std::endl;
 
 
     return 0;
