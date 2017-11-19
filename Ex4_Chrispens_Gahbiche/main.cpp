@@ -5,12 +5,6 @@
 #include "transform_reduce.h"
 
 int main() {
-    /*
-     * Create an 8-gon from the coordinates
-        { {0,0}, {2,-1}, {4,-2}, {5,0}, {6,2}, {4,3}, {2,4}, {1,2} } and check if
-        circumference(), area(), coord(int i) return the correct values, since this is actually a
-        square { {0,0}, {4,-2}, {6,2}, {2,4} }.
-     */
 
     // 4.1
     std::cout << "<----------- 4.1 ----------->" << std::endl;
@@ -66,7 +60,7 @@ int main() {
           result_trafo_red_hexagons[0] << "\t" << result_trafo_red_hexagons[1] << "\t" << result_trafo_red_hexagons[2] << std::endl;
 
 
-    std::array<double, 3> result_trafo_variadic = transform_reduce(triangles[0], triangles[1], triangles[2], triangles[3]);
+    std::array<double, 3> result_trafo_variadic = transform_reduce(triangles[0], triangles[1], hexagons[2], hexagons[3]);
     std::cout << "transform_reduce using variadic templates: " << std::endl <<
             result_trafo_variadic[0] << "\t" << result_trafo_variadic[1] << "\t" << result_trafo_variadic[2] << std::endl;
 

@@ -9,8 +9,8 @@
 Point::Point(double x, double y) : x(x), y(y) {}
 
 Point::Point() {
-    x = double(rand() % 10);
-    y = double(rand() % 10);
+    x = double(rand() % 100);
+    y = double(rand() % 100);
     //std::cout << "x und y:    " <<  x << "|" << y << std::endl;
 }
 

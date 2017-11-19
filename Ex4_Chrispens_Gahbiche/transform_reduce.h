@@ -2,13 +2,6 @@
 // Created by Habib Gahbiche on 18/11/2017.
 //
 
-/*
-Let us generalize the function sum_circumference() to transform_reduce(), which oper-
- ates on an unspecified type (given as a template parameter) and applies a unary function
- to each object (e.g. call of circumference()) and then combines these results with a binary
- function (e.g. summation) to obtain the final result. Start with an implementation which
- takes an initializer list of objects.
-*/
 
 #ifndef EX4_CHRISPENS_GAHBICHE_TRANSFORM_REDUCE_H
 #define EX4_CHRISPENS_GAHBICHE_TRANSFORM_REDUCE_H
@@ -47,7 +40,7 @@ std::array<double, 3> transform_reduce(std::initializer_list<T> lst){
     for(auto elm: lst) {
         sum(elm);
         get_geom_mean(elm);
-        counter += get_nb(elm, 6.);
+        counter += get_nb(elm, 50.);
     }
 
     geom_mean = pow(geom_mean, 1./double(lst.size()));
@@ -56,27 +49,13 @@ std::array<double, 3> transform_reduce(std::initializer_list<T> lst){
 
 }
 
-
-/*template <typename T>
-double sum_circumference(T arg){
-    return arg.circumference();
-}
-
-template <typename T, typename... Tail>
-double sum_circumference(T head, Tail... tail){
-    return head.circumference() + sum_circumference(tail...);
-}
-
- */
-
-template< std::size_t N >
-std::array<double,N> operator+( const std::array<double,N> lhs, const std::array<double,N> rhs ){
+std::array<double,3> operator+( const std::array<double,3> lhs, const std::array<double,3> rhs ){
 
     if(lhs.size() != rhs.size()){
         throw std::out_of_range ("The Two arrays you wanted to add up, have not the same size!");
     }
 
-    std::array<double,N> sum = {0, 1, 0};
+    std::array<double,3> sum = {0, 1, 0};
 
     //for(size_t i=0; i<sum.size(); i++){
     //    sum[i] += lhs[i] + rhs[i];
@@ -111,7 +90,7 @@ std::array<double, 3> transform_reduce(T polygon){
         return pow(elm.area(), 1./nb_arg);
     };
 
-    double sidesBiggerThan = get_nb(polygon, 6.);
+    double sidesBiggerThan = get_nb(polygon, 50.);
     double circumference = get_sum(polygon);
     double geom_mean_product = get_geom_mean(polygon);
     
@@ -124,7 +103,7 @@ std::array<double, 3> transform_reduce(T polygon){
 template <typename T, typename... Tail>
 std::array<double, 3> transform_reduce(T head, Tail... tail){
 
-    if (sizeof...(Tail) > nb_arg){nb_arg = sizeof...(Tail) + 1;}
+    if (sizeof...(Tail) > nb_arg){nb_arg = sizeof...(Tail) + 1;} //nb_arg is global
 
     std::array<double,3> counterHead = transform_reduce(head);
     std::array<double,3> counterTail = transform_reduce(tail...);
