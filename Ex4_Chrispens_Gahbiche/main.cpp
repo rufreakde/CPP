@@ -56,7 +56,7 @@ int main() {
     std::cout << std::endl << std::endl;
     // 4.3
     std::cout << "<----------- 4.3 ----------->" << std::endl;
-    std::cout << "FORMAT:    Circumference / Geometric Mean / Count of sides that are bicker than Threshold" << std::endl;
+    std::cout << "FORMAT:    Circumference / Geometric Mean / Count of sides that are larger than Threshold" << std::endl;
     std::array<double, 3> result_trafo_red = transform_reduce({triangles[0], triangles[1], triangles[2], triangles[3]});
     std::cout << "transform_reduce using init_list: " << std::endl <<
           result_trafo_red[0] << "\t" << result_trafo_red[1] << "\t" << result_trafo_red[2] << std::endl;

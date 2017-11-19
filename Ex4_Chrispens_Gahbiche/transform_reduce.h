@@ -22,7 +22,6 @@ Let us generalize the function sum_circumference() to transform_reduce(), which 
 template<typename T>
 std::array<double, 3> transform_reduce(std::initializer_list<T> lst){
 
-    auto add = [=](double &a, const double &b){return a+b;};
     double summe =0;
     double counter =0;
     double geom_mean = 1;
@@ -77,23 +76,26 @@ std::array<double,N> operator+( const std::array<double,N> lhs, const std::array
         throw std::out_of_range ("The Two arrays you wanted to add up, have not the same size!");
     }
 
-    std::array<double,N> sum{};
+    std::array<double,N> sum = {0, 1, 0};
 
-    for (size_t i=0; i < lhs.size(); i++)
-    {
-        sum[i] += (lhs[i] + rhs [i]);   // aggregate the sums into the first array
-    }
+    //for(size_t i=0; i<sum.size(); i++){
+    //    sum[i] += lhs[i] + rhs[i];
+    //}
+    sum[0] += lhs[0] + rhs[0];
+    sum[1] =  lhs[1] * rhs[1];
+    sum[2] += lhs[2] + rhs[2];
+
     return sum;
 };
+
+double nb_arg = 0;
 
 
 template<typename T>
 std::array<double, 3> transform_reduce(T polygon){
 
     auto get_sum = [](T &elm) {
-        double summ;
-        summ += elm.circumference() ;
-        return summ;
+        return elm.circumference();
     };
 
     auto get_nb = [](T &elm, double threshold) {
@@ -106,9 +108,7 @@ std::array<double, 3> transform_reduce(T polygon){
     };
 
     auto get_geom_mean = [](T &elm) {
-        double geom_mean = 1;
-        geom_mean *= elm.area();
-        return geom_mean;
+        return pow(elm.area(), 1./nb_arg);
     };
 
     double sidesBiggerThan = get_nb(polygon, 6.);
@@ -119,10 +119,16 @@ std::array<double, 3> transform_reduce(T polygon){
     return std::array<double,3>{ circumference, geom_mean_product, sidesBiggerThan};
 };
 
+
+
 template <typename T, typename... Tail>
 std::array<double, 3> transform_reduce(T head, Tail... tail){
+
+    if (sizeof...(Tail) > nb_arg){nb_arg = sizeof...(Tail) + 1;}
+
     std::array<double,3> counterHead = transform_reduce(head);
     std::array<double,3> counterTail = transform_reduce(tail...);
+
     return counterHead + counterTail;
 };
 
