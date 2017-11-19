@@ -11,7 +11,7 @@ Point::Point(double x, double y) : x(x), y(y) {}
 Point::Point() {
     x = double(rand() % 10);
     y = double(rand() % 10);
-    std::cout << "x und y:    " <<  x << "|" << y << std::endl;
+    //std::cout << "x und y:    " <<  x << "|" << y << std::endl;
 }
 
 bool Point::operator==(const Point &rhs) const {

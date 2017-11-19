@@ -48,7 +48,7 @@ std::array<double, 3> transform_reduce(std::initializer_list<T> lst){
     for(auto elm: lst) {
         sum(elm);
         get_geom_mean(elm);
-        counter += get_nb(elm, 6);
+        counter += get_nb(elm, 6.);
     }
 
     geom_mean = pow(geom_mean, 1./double(lst.size()));
@@ -70,8 +70,32 @@ double sum_circumference(T head, Tail... tail){
 
  */
 
+template< std::size_t N >
+std::array<double,N> operator+( const std::array<double,N> lhs, const std::array<double,N> rhs ){
+
+    if(lhs.size() != rhs.size()){
+        throw std::out_of_range ("The Two arrays you wanted to add up, have not the same size!");
+    }
+
+    std::array<double,N> sum{};
+
+    for (size_t i=0; i < lhs.size(); i++)
+    {
+        sum[i] += (lhs[i] + rhs [i]);   // aggregate the sums into the first array
+    }
+    return sum;
+};
+
+
 template<typename T>
-double transform_reduce(T polygon){
+std::array<double, 3> transform_reduce(T polygon){
+
+    auto get_sum = [](T &elm) {
+        double summ;
+        summ += elm.circumference() ;
+        return summ;
+    };
+
     auto get_nb = [](T &elm, double threshold) {
         int elm_counter=0;
         for (size_t i = 0; i < elm.size(); i++) {
@@ -80,16 +104,26 @@ double transform_reduce(T polygon){
         }
         return elm_counter;
     };
-    double test = get_nb(polygon, 2.);
-    return test;
+
+    auto get_geom_mean = [](T &elm) {
+        double geom_mean = 1;
+        geom_mean *= elm.area();
+        return geom_mean;
+    };
+
+    double sidesBiggerThan = get_nb(polygon, 6.);
+    double circumference = get_sum(polygon);
+    double geom_mean_product = get_geom_mean(polygon);
+    
+    
+    return std::array<double,3>{ circumference, geom_mean_product, sidesBiggerThan};
 };
 
 template <typename T, typename... Tail>
-double transform_reduce(T head, Tail... tail){
-    double counter = transform_reduce(head);
-    return counter + transform_reduce(tail...);
-
-
+std::array<double, 3> transform_reduce(T head, Tail... tail){
+    std::array<double,3> counterHead = transform_reduce(head);
+    std::array<double,3> counterTail = transform_reduce(tail...);
+    return counterHead + counterTail;
 };
 
 
