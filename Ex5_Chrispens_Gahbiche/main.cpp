@@ -15,10 +15,14 @@ int main() {
     thread t2 {consumer1};
     thread t3 {producer2, ref(P)};
     thread t4 {consumer2};
+    thread t5 {producer3, ref(P)};
+    thread t6 {consumer3};
 
     t1.join();
     t2.join();
     t3.join();
     t4.join();
+    t5.join();
+    t6.join();
     return 0;
 }
