@@ -34,44 +34,48 @@ std::mutex mmutex4;
 
 void producer1(int64_t a0, size_t &N) {
     while(true) {
-        std::unique_lock<std::mutex> lck {mmutex};
 
-        std::vector<int64_t> a;
-        a.push_back(a0);
-        for(size_t n=0; n<N; n++){
-            a.push_back((a[n] % 2) == 0 ? int64_t(double(a[n]) / 2) : 3 * a[n] + 1);
+        if(mqueue1.size() <= 0) { //fix for stream output! cout
+            std::unique_lock<std::mutex> lck{mmutex};
+
+
+            std::vector<int64_t> a;
+            a.push_back(a0);
+            for (size_t n = 0; n < N; n++) {
+                a.push_back((a[n] % 2) == 0 ? int64_t(double(a[n]) / 2) : 3 * a[n] + 1);
+            }
+            mqueue1.push(a);
+            std::cout << "# finished producer 1" << std::endl;
         }
-        mqueue1.push(a);
-        event1.notify_one(); //notify
-        std::cout << "# finished producer 1" << std::endl;
+        event1.notify_one();
     }   // release lock (at end of scope)
 }
 
 void consumer1() {
     while(true) {
-        std::unique_lock<std::mutex> lck2{mmutex2};
+            std::unique_lock<std::mutex> lck2{mmutex2};
 
-        std::unique_lock<std::mutex> lck{mmutex};
-        event1.wait(lck) /* do nothing */;
-        while(mqueue1.size()>0) {
-            auto a = mqueue1.front();
+            std::unique_lock<std::mutex> lck{mmutex};
+            event1.wait(lck) /* do nothing */;
+            while (mqueue1.size() > 0) {
+                auto a = mqueue1.front();
 
-            std::string stringLog = "# Consumer1 = ";
-            for(auto elm : a){
-                stringLog += " " + std::to_string(elm);
+                std::string stringLog = "# Consumer1 = ";
+                for (auto elm : a) {
+                    stringLog += " " + std::to_string(elm);
+                }
+                std::cout << stringLog << std::endl;
+                mqueue2.push(a);
+                mqueue1.pop();
             }
-            std::cout << stringLog << std::endl;
-            mqueue2.push(a);
-            mqueue1.pop();
-        }
-        lck.unlock();
-        event2.notify_one();
+            lck.unlock();
+            event2.notify_one();
     }
 }
 
 int64_t min(std::vector<int64_t> a, size_t n){
-    int64_t min = std::numeric_limits<int64_t>::infinity();
-    for(size_t i=0; i<a.size(); i++){
+    int64_t min = std::numeric_limits<int64_t>::max();
+    for(size_t i=0; i<n; i++){
         for(size_t j=0; j<n; j++){
             if(abs(a[i] - a[j]) < min && i!=j){
                 min = abs(a[i] - a[j]);
@@ -94,25 +98,30 @@ int64_t max(std::vector<int64_t> a, size_t n){
 
 void producer2(size_t &N) {
     while(true) {
-    std::unique_lock<std::mutex> lck3{mmutex3};
+        if(mqueue3.size() <= 0) {  //fix for stream output! cout
+            std::unique_lock<std::mutex> lck3{mmutex3};
 
-        std::unique_lock<std::mutex> lck2 {mmutex2};
-        event2.wait(lck2) /* do nothing */;
+            std::unique_lock<std::mutex> lck2{mmutex2};
+            event2.wait(lck2) /* do nothing */;
 
-        while(mqueue2.size()>0) {
-            auto a = mqueue2.front();
-            std::vector<int64_t> min_n;
-            std::vector<int64_t> max_n;
-            for (size_t n = 0; n < N; n++) {
-                min_n.push_back(min(a, n));
-                max_n.push_back(max(a, n));
+            while (mqueue2.size() > 0) {
+                auto a = mqueue2.front();
+                std::vector<int64_t> min_n;
+                std::vector<int64_t> max_n;
+                for (size_t n = 2; n < N; n++) {
+                    int64_t tMax = max(a, n);
+                    int64_t tMin = min(a, n);
+
+                    min_n.push_back(tMin);
+                    max_n.push_back(tMax);
+                }
+                auto tempVector = std::array<std::vector<int64_t>, 2> {min_n, max_n};
+                mqueue3.push(tempVector);
+                mqueue2.pop();
             }
-            auto tempVector = std::array<std::vector<int64_t >,2> {min_n,max_n};
-            mqueue3.push( tempVector );
-            mqueue2.pop();
+            std::cout << "# finished producer 2" << std::endl;
+            lck2.unlock();
         }
-        std::cout << "# finished producer 2" << std::endl;
-        lck2.unlock();
         event3.notify_one(); //notify
     }   // release lock (at end of scope)
 }
@@ -127,9 +136,11 @@ void consumer2() {
             auto a = mqueue3.front();
 
             std::string stringLog = "# Consumer2 = ";
-            for(auto elm : a){
-                stringLog += " " + std::to_string(elm[0]) + "|" + std::to_string(elm[1]);
-            }
+            //for(size_t j=0; j< a.size(); j++){
+                for(size_t i=0; i< a[0].size(); i++) {
+                    stringLog += " " + std::to_string(a[0][i]) + "|" + std::to_string(a[1][i]);
+                }
+            //}
             std::cout << stringLog << std::endl;
 
             mqueue4.push(a);
