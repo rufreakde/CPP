@@ -4,5 +4,5 @@ project(Ex5_Chrispens_Gahbiche)
 set(CMAKE_CXX_STANDARD 17)
 set(CXX_STANDARD_REQUIRED ON)
 
-set(SOURCE_FILES main.cpp)
+set(SOURCE_FILES main.cpp producers_consumers.h)
 add_executable(Ex5_Chrispens_Gahbiche ${SOURCE_FILES})
