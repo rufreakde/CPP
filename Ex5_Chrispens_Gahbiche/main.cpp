@@ -13,8 +13,12 @@ int main() {
 
     thread t1 {producer1, a0, ref(P)};
     thread t2 {consumer1};
+    thread t3 {producer2, ref(P)};
+    thread t4 {consumer2};
 
     t1.join();
     t2.join();
+    t3.join();
+    t4.join();
     return 0;
 }
