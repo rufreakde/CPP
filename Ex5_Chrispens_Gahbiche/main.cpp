@@ -7,15 +7,14 @@ using namespace std;
 
 int main() {
 
-    int64_t N = 10;
-    vector<double> a(N);
-    a[0] = 3;
+    size_t P = 10;
+    int64_t a0 = 3;
 
 
-    thread t1 {producer1, ref(a)};
-    thread t2 {consumer1, ref(a)};
+    thread t1 {producer1, a0, ref(P)};
+    thread t2 {consumer1};
 
-    t2.join();
     t1.join();
+    t2.join();
     return 0;
 }
