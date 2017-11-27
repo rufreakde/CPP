@@ -1,6 +1,6 @@
 #include <iostream>
 #include "producers_consumers.h"
-#include <thread>
+#include <zconf.h>
 
 using namespace std;
 
@@ -12,10 +12,15 @@ int main() {
 
 
     thread t1 {producer1, a0, ref(P)};
+    sleep(0.01);
     thread t2 {consumer1};
+    sleep(0.01);
     thread t3 {producer2, ref(P)};
+    sleep(0.01);
     thread t4 {consumer2};
+    sleep(0.01);
     thread t5 {producer3, ref(P)};
+    sleep(0.01);
     thread t6 {consumer3};
 
     t1.join();

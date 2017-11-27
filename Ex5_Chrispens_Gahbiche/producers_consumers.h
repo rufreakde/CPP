@@ -14,13 +14,14 @@
 #include <thread>
 #include <array>
 #include <limits>
+#include <zconf.h>
 
-std::queue< std::vector<int64_t> > mqueue1;
-std::queue< std::vector<int64_t> > mqueue2;
-std::queue< std::array<std::vector<int64_t >,2> > mqueue3;// the queue of messages
-std::queue< std::array<std::vector<int64_t >,2> > mqueue4;
-std::queue<std::vector<int64_t>> mqueue5;
-std::queue<std::array<std::vector<int64_t >,2>> mqueue6;
+std::queue< std::vector<int64_t> > mqueue1{};
+std::queue< std::vector<int64_t> > mqueue2{};
+std::queue< std::array<std::vector<int64_t >,2> > mqueue3{};// the queue of messages
+std::queue< std::array<std::vector<int64_t >,2> > mqueue4{};
+std::queue<std::vector<int64_t>> mqueue5{};
+std::queue<std::array<std::vector<int64_t >,2>> mqueue6{};
 
 
 std::condition_variable event1; // the variable communicating events
@@ -40,20 +41,19 @@ std::mutex mmutex6;
 
 void producer1(int64_t a0, size_t &N) {
     while(true) {
-
         if(mqueue1.size() <= 0) { //fix for stream output! cout
             std::unique_lock<std::mutex> lck{mmutex};
-
-
             std::vector<int64_t> a;
             a.push_back(a0);
             for (size_t n = 0; n < N; n++) {
                 a.push_back((a[n] % 2) == 0 ? int64_t(double(a[n]) / 2) : 3 * a[n] + 1);
             }
             mqueue1.push(a);
+            std::cout <<  "Size P: " << mqueue1.size() << std::endl;
             std::cout << "# finished producer 1" << std::endl;
         }
         event1.notify_one();
+        sleep(0.01);
     }   // release lock (at end of scope)
 }
 
@@ -63,20 +63,23 @@ void consumer1() {
 
             std::unique_lock<std::mutex> lck{mmutex};
             event1.wait(lck) /* do nothing */;
+            std::cout <<  "Size C: " << mqueue1.size() << std::endl;
+
             while (mqueue1.size() > 0) {
                 auto a = mqueue1.front();
 
-                std::string stringLog = "# Consumer1 = ";
-                for (auto elm : a) {
-                    stringLog += " " + std::to_string(elm);
-                }
-                std::cout << stringLog << std::endl;
+                //std::string stringLog = "# Consumer1 = ";
+                //for (auto elm : a) {
+                    //stringLog += " " + std::to_string(elm);
+                //}
+                //std::cout << stringLog << std::endl;
                 mqueue2.push(a);
                 mqueue5.push(a);
                 mqueue1.pop();
             }
             lck.unlock();
             event2.notify_one();
+            sleep(0.01);
     }
 }
 
@@ -130,6 +133,7 @@ void producer2(size_t &N) {
             lck2.unlock();
         }
         event3.notify_one(); //notify
+        sleep(0.05);
     }   // release lock (at end of scope)
 }
 
@@ -142,19 +146,20 @@ void consumer2() {
         while(mqueue3.size()>0) {
             auto a = mqueue3.front();
 
-            std::string stringLog = "# Consumer2 = ";
+            //std::string stringLog = "# Consumer2 = ";
             //for(size_t j=0; j< a.size(); j++){
-                for(size_t i=0; i< a[0].size(); i++) {
-                    stringLog += " " + std::to_string(a[0][i]) + "|" + std::to_string(a[1][i]);
-                }
+                //for(size_t i=0; i< a[0].size(); i++) {
+                  //  stringLog += " " + std::to_string(a[0][i]) + "|" + std::to_string(a[1][i]);
+                //}
             //}
-            std::cout << stringLog << std::endl;
+            //std::cout << stringLog << std::endl;
 
             mqueue4.push(a);
             mqueue3.pop();
         }
         lck3.unlock();
         event4.notify_one();
+        sleep(0.05);
     }
 }
 
@@ -193,6 +198,7 @@ void producer3(size_t &N) {
             lck4.unlock();
         }
         event5.notify_one(); //notify
+        sleep(0.01);
     }   // release lock (at end of scope)
 }
 
@@ -205,21 +211,22 @@ void consumer3() {
         while(mqueue6.size()>0) {
             auto tempVec = mqueue6.front();
 
-            std::string stringLog_M0 = "# Consumer3 M0= ";
+            /*std::string stringLog_M0 = "# Consumer3 M0= ";
             std::string stringLog_M1 = "# Consumer3 M1= ";
 
             for(size_t i=0; i< tempVec[0].size(); i++) {
                 stringLog_M0 += " " + std::to_string(tempVec[0][i]);
                 stringLog_M1 += " " + std::to_string(tempVec[1][i]);
-            }
+            }*/
 
 
-            std::cout << stringLog_M1 << std::endl << stringLog_M0 << std::endl;
+            //std::cout << stringLog_M1 << std::endl << stringLog_M0 << std::endl;
 
             //mqueue5.push(a);
             mqueue6.pop();
         }
         lck5.unlock();
+        sleep(0.01);
         //event4.notify_one();
     }
 }
