@@ -7,7 +7,7 @@ using namespace std;
 
 int main() {
 
-    size_t P = 10;
+    size_t P = 100;
     int64_t a0 = 3;
 
 

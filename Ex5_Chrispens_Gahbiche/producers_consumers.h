@@ -15,13 +15,14 @@
 #include <array>
 #include <limits>
 #include <zconf.h>
+#include <set>
 
 std::queue< std::vector<int64_t> > mqueue1{};
 std::queue< std::vector<int64_t> > mqueue2{};
 std::queue< std::array<std::vector<int64_t >,2> > mqueue3{};// the queue of messages
 std::queue< std::array<std::vector<int64_t >,2> > mqueue4{};
 std::queue<std::vector<int64_t>> mqueue5{};
-std::queue<std::array<std::vector<int64_t >,2>> mqueue6{};
+std::queue<std::array<std::set<int64_t >,2>> mqueue6{};
 
 
 std::condition_variable event1; // the variable communicating events
@@ -60,7 +61,6 @@ void producer1(int64_t a0, size_t &N) {
 void consumer1() {
     while(true) {
             std::unique_lock<std::mutex> lck2{mmutex2};
-
             std::unique_lock<std::mutex> lck{mmutex};
             event1.wait(lck) /* do nothing */;
             std::cout <<  "Size C: " << mqueue1.size() << std::endl;
@@ -170,27 +170,25 @@ void producer3(size_t &N) {
             std::unique_lock<std::mutex> lck5{mmutex5};
 
             std::unique_lock<std::mutex> lck4{mmutex4};
-            event4.wait(lck4) /* do nothing */;
+            event4.wait(lck4);
 
             while (mqueue5.size() > 0) {
                 auto a = mqueue5.front();
-
-
-                std::vector<int64_t > M0;
-                std::vector<int64_t > M1;
+                std::set<int64_t > M0;
+                std::set<int64_t > M1;
 
                 for (size_t n = 2; n < N; n++) {
                     int64_t tMax = max(a, n);
                     int64_t tMin = min(a, n);
 
                     if(tMin == 0) {
-                        M0.push_back(a[n]);
+                        M0.insert(a[n]);
                     }
                     if(tMax >= pow(1.5, n)){
-                        M1.push_back(a[n]);
+                        M1.insert(a[n]);
                     }
                 }
-                auto tempVector = std::array<std::vector<int64_t>, 2> {M0, M1};
+                auto tempVector = std::array<std::set<int64_t>, 2> {M0, M1};
                 mqueue6.push(tempVector);
                 mqueue5.pop();
             }
@@ -199,7 +197,7 @@ void producer3(size_t &N) {
         }
         event5.notify_one(); //notify
         sleep(0.01);
-    }   // release lock (at end of scope)
+    }
 }
 
 void consumer3() {
