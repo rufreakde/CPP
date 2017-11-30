@@ -10,14 +10,13 @@
 #include <condition_variable>
 
 #include <iostream>
+#include <set>
 
 
-template <typename T>
-class MulticastMutexTransport
-{
+template<typename T>
+class MulticastMutexTransport {
 private:
-    struct SourceData
-    {
+    struct SourceData {
         std::deque<T> elements;
     };
 
@@ -31,33 +30,30 @@ public:
 
     MulticastMutexTransport(void) = default;
 
-    SourceId addSource(void)
-    {
+    SourceId addSource(void) {
         std::unique_lock<std::mutex> lock(mutex);
         sources.push_back(SourceData());
         return sources.size() - 1;
     }
 
-    void push(T value, std::size_t id)
-    {
+    void push(T value, std::size_t id) {
         std::unique_lock<std::mutex> lock(mutex);
-        for (auto& source : sources) {
+        for (auto &source : sources) {
             source.elements.push_back(value);
             //std::cout << "push from: " << id << " val: " << value << std::endl;
         }
         cv.notify_all();
     }
-    void signifyCompletion(void)
-    {
+
+    void signifyCompletion(void) {
         std::unique_lock<std::mutex> lock(mutex);
         productionCompleted = true;
         cv.notify_all();
     }
 
-    std::optional<T> tryPull(SourceId sourceId, std::string consumerName)
-    {
+    std::optional<T> tryPull(SourceId sourceId, std::string consumerName) {
         std::unique_lock<std::mutex> lock(mutex);
-        auto& elements = sources.at(sourceId).elements;
+        auto &elements = sources.at(sourceId).elements;
         while (!productionCompleted && elements.size() <= 0) {
             cv.wait(lock);
         }
@@ -68,14 +64,13 @@ public:
         T result = std::move(elements.front());
         elements.pop_front();
 
-        std::cout << consumerName << "  value: " <<  result << std::endl;
+        std::cout << consumerName << "  value: " << result << std::endl;
 
         return result;
     }
 };
 
-void testProducerConsumerQueue(std::size_t nMax)
-{
+void testProducerConsumerQueue(int startValue, const std::size_t nMax) {
     // set up transportP1, add source for ourselves
     auto transportP1 = std::make_shared<MulticastMutexTransport<int>>();
     auto sourceIdP1 = transportP1->addSource();
@@ -89,40 +84,77 @@ void testProducerConsumerQueue(std::size_t nMax)
     // start producer 1
     // (be sure to capture by value when detaching the thread and to use a shared_ptr<>
     // so the thread can keep the transportP1 alive)
-    std::thread( [=]{
-                    for (std::size_t n = 1; n <= nMax; ++n) { //run through the count we set in start
-                        //TODO calculate and push right values
-                        transportP1->push(static_cast<int>(n), 1); //push the value you want to push calculate it beforehand!
-                        std::cout << "production 1 " << n << std::endl; //print the value you push to see results
-                    }
-                    transportP1->signifyCompletion();
-                }).detach();
+    std::thread([=] {
+
+        std::vector<int> CollatzValues = {startValue};
+        transportP1->push(static_cast<int>(CollatzValues[0]), 1);
+
+        for (std::size_t n = 1; n <= nMax; ++n) { //run through the count we set in start
+            if (CollatzValues[n - 1] % 2 == 0) {
+                CollatzValues.push_back(CollatzValues[n - 1] / 2);
+            } else {
+                CollatzValues.push_back((CollatzValues[n - 1] * 3) + 2);
+            }
+
+            transportP1->push(static_cast<int>(CollatzValues[n]),
+                              1); //push the value you want to push calculate it beforehand!
+            std::cout << "production 1 " << CollatzValues[n] << std::endl; //print the value you push to see results
+        }
+        transportP1->signifyCompletion();
+    }).detach();
 
     // start producer 2
     // (be sure to capture by value when detaching the thread and to use a shared_ptr<>
     // so the thread can keep the transportP2 alive)
-    std::thread( [=]{
+    std::thread([=] {
+
+        std::vector<int> CollatzValues = {};
+        std::set<int> ArrayOfSubstractions;
         // consume produced elements
-        std::size_t valProd2 = 0;
-        while (auto next = transportP1->tryPull(sourceIdP1, "Producer [2] consuming: sourceIdP1")) { //wait for producer 1
-            //TODO calculate and push right values
-            valProd2 += *next; //just calculating something with the values of producer 1
-            transportP2->push(static_cast<int>(valProd2), 2); //push the value of producer 2
-            std::cout << "production 2 " << valProd2 << std::endl;
+        while (auto next = transportP1->tryPull(sourceIdP1,
+                                                "Producer [2] consuming: sourceIdP1")) { //wait for producer 1
+
+            CollatzValues.push_back(*next);
+
+            if (CollatzValues.size() > 1) {
+
+                for (size_t i = 0; i< CollatzValues.size(); i++) {
+                    for (size_t j = 0; j< CollatzValues.size(); j++)
+                    {
+                        if(i != j){
+                            ArrayOfSubstractions.insert( abs(CollatzValues[i] - CollatzValues[j]) );
+                        }
+                    }
+                }
+            }
         }
 
-        if (valProd2 != (nMax * (nMax + 1)) / 2) //TODO checks have to be changed after the calculations are changed
+        transportP2->push(static_cast<int>(*ArrayOfSubstractions.rbegin()), 2);
+        transportP2->push(static_cast<int>(*ArrayOfSubstractions.rend()), 2);
+
+        if (transportP2->size() != 2)
             throw std::logic_error("unexpected result");
+
+        std::cout << "production 2 MIN: " << *ArrayOfSubstractions.rbegin() << std::endl;
+        std::cout << "production 2 Max: " << *ArrayOfSubstractions.rend() << std::endl;
 
         transportP2->signifyCompletion();
 
     }).detach();
 
+
+    /*ArrayOfSubstractions.push_back(CollatzValues[CollatzValues.size()])
+
+    ArrayOfSubstractions.push_back(next * )
+    transportP2->push(static_cast<int>(valProd2), 2);
+
+
     // start producer 3
-    std::thread( [=]{
+    std::thread([=] {
         // consume produced elements
         std::size_t valProd3 = 0;
-        while (auto next = transportP2->tryPull(sourceIdP2, "Producer [3] consuming: sourceIdP2")) { //again wait for Producer 2
+        while (auto next = transportP2->tryPull(sourceIdP2,
+                                                "Producer [3] consuming: sourceIdP2")) { //again wait for Producer 2
             //TODO calculate and push right values
             valProd3 = *next; //do math
             transportP3->push(static_cast<int>(valProd3), 3); //push value of Producer 3
@@ -145,15 +177,12 @@ void testProducerConsumerQueue(std::size_t nMax)
 
 }
 
-int main(int argc, char* argv[])
-{
-    try
-    {
-        testProducerConsumerQueue(1000);//0000
+int main(int argc, char *argv[]) {
+    try {
+        testProducerConsumerQueue(3, 1000); //10000000
         std::cout << "All tests ran successfully." << std::endl;
     }
-    catch (const std::exception& e)
-    {
+    catch (const std::exception &e) {
         std::cerr << "Error: " << e.what() << std::endl;
         return 1;
     }
