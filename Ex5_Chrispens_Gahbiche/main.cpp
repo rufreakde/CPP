@@ -1,33 +1,160 @@
+
+#include <optional>
+#include <deque>
+#include <vector>
+#include <type_traits>
+#include <memory>
+
+#include <thread>
+#include <mutex>
+#include <condition_variable>
+
 #include <iostream>
-#include "producers_consumers.h"
-#include <zconf.h>
-
-using namespace std;
 
 
-int main() {
+template <typename T>
+class MulticastMutexTransport
+{
+private:
+    struct SourceData
+    {
+        std::deque<T> elements;
+    };
 
-    size_t P = 100;
-    int64_t a0 = 3;
+    std::vector<SourceData> sources = {};
+    std::mutex mutex;
+    std::condition_variable cv;
+    bool productionCompleted = false;
 
+public:
+    using SourceId = std::size_t;
 
-    thread t1 {producer1, a0, ref(P)};
-    sleep(0.01);
-    thread t2 {consumer1};
-    sleep(0.01);
-    thread t3 {producer2, ref(P)};
-    sleep(0.01);
-    thread t4 {consumer2};
-    sleep(0.01);
-    thread t5 {producer3, ref(P)};
-    sleep(0.01);
-    thread t6 {consumer3};
+    MulticastMutexTransport(void) = default;
 
-    t1.join();
-    t2.join();
-    t3.join();
-    t4.join();
-    t5.join();
-    t6.join();
-    return 0;
+    SourceId addSource(void)
+    {
+        std::unique_lock<std::mutex> lock(mutex);
+        sources.push_back(SourceData());
+        return sources.size() - 1;
+    }
+
+    void push(T value, std::size_t id)
+    {
+        std::unique_lock<std::mutex> lock(mutex);
+        for (auto& source : sources) {
+            source.elements.push_back(value);
+            //std::cout << "push from: " << id << " val: " << value << std::endl;
+        }
+        cv.notify_all();
+    }
+    void signifyCompletion(void)
+    {
+        std::unique_lock<std::mutex> lock(mutex);
+        productionCompleted = true;
+        cv.notify_all();
+    }
+
+    std::optional<T> tryPull(SourceId sourceId, std::string consumerName)
+    {
+        std::unique_lock<std::mutex> lock(mutex);
+        auto& elements = sources.at(sourceId).elements;
+        while (!productionCompleted && elements.size() <= 0) {
+            cv.wait(lock);
+        }
+
+        if (elements.empty())
+            return std::nullopt;
+
+        T result = std::move(elements.front());
+        elements.pop_front();
+
+        std::cout << consumerName << "  value: " <<  result << std::endl;
+
+        return result;
+    }
+};
+
+void testProducerConsumerQueue(std::size_t nMax)
+{
+    // set up transportP1, add source for ourselves
+    auto transportP1 = std::make_shared<MulticastMutexTransport<int>>();
+    auto sourceIdP1 = transportP1->addSource();
+
+    auto transportP2 = std::make_shared<MulticastMutexTransport<int>>();
+    auto sourceIdP2 = transportP2->addSource();
+
+    auto transportP3 = std::make_shared<MulticastMutexTransport<int>>();
+    auto sourceIdP3 = transportP3->addSource();
+
+    // start producer 1
+    // (be sure to capture by value when detaching the thread and to use a shared_ptr<>
+    // so the thread can keep the transportP1 alive)
+    std::thread( [=]{
+                    for (std::size_t n = 1; n <= nMax; ++n) { //run through the count we set in start
+                        //TODO calculate and push right values
+                        transportP1->push(static_cast<int>(n), 1); //push the value you want to push calculate it beforehand!
+                        std::cout << "production 1 " << n << std::endl; //print the value you push to see results
+                    }
+                    transportP1->signifyCompletion();
+                }).detach();
+
+    // start producer 2
+    // (be sure to capture by value when detaching the thread and to use a shared_ptr<>
+    // so the thread can keep the transportP2 alive)
+    std::thread( [=]{
+        // consume produced elements
+        std::size_t valProd2 = 0;
+        while (auto next = transportP1->tryPull(sourceIdP1, "Producer [2] consuming: sourceIdP1")) { //wait for producer 1
+            //TODO calculate and push right values
+            valProd2 += *next; //just calculating something with the values of producer 1
+            transportP2->push(static_cast<int>(valProd2), 2); //push the value of producer 2
+            std::cout << "production 2 " << valProd2 << std::endl;
+        }
+
+        if (valProd2 != (nMax * (nMax + 1)) / 2) //TODO checks have to be changed after the calculations are changed
+            throw std::logic_error("unexpected result");
+
+        transportP2->signifyCompletion();
+
+    }).detach();
+
+    // start producer 3
+    std::thread( [=]{
+        // consume produced elements
+        std::size_t valProd3 = 0;
+        while (auto next = transportP2->tryPull(sourceIdP2, "Producer [3] consuming: sourceIdP2")) { //again wait for Producer 2
+            //TODO calculate and push right values
+            valProd3 = *next; //do math
+            transportP3->push(static_cast<int>(valProd3), 3); //push value of Producer 3
+            std::cout << "production 3 " << valProd3 << std::endl;
+        }
+
+        if (valProd3 != (nMax * (nMax + 1)) / 2) //TODO checks have to be changed after the calculations are changed
+            throw std::logic_error("unexpected result");
+
+        transportP3->signifyCompletion();
+
+    }).detach();
+
+    //wait for final consume after process is finished:
+    // consume produced elements
+    //alternatively just joun() producer 3 instead of detach!
+    while (auto next = transportP3->tryPull(sourceIdP3, "MainThread consuming: sourceIdP3")) {
+        std::cout << "Final Result: " << *next << std::endl;
+    }
+
+}
+
+int main(int argc, char* argv[])
+{
+    try
+    {
+        testProducerConsumerQueue(1000);//0000
+        std::cout << "All tests ran successfully." << std::endl;
+    }
+    catch (const std::exception& e)
+    {
+        std::cerr << "Error: " << e.what() << std::endl;
+        return 1;
+    }
 }
