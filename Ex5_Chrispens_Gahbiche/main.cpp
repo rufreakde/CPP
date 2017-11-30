@@ -36,6 +36,12 @@ public:
         return sources.size() - 1;
     }
 
+    std::size_t size(){
+        //TODO Buggy
+        std::unique_lock<std::mutex> lock(mutex);
+        return sources.size();
+    }
+
     void push(T value, std::size_t id) {
         std::unique_lock<std::mutex> lock(mutex);
         for (auto &source : sources) {
@@ -133,7 +139,7 @@ void testProducerConsumerQueue(int startValue, const std::size_t nMax) {
         transportP2->push(static_cast<int>(*ArrayOfSubstractions.rend()), 2);
 
         if (transportP2->size() != 2)
-            throw std::logic_error("unexpected result");
+            throw std::logic_error("Production 2 unexpected result: " + transportP2->size() );
 
         std::cout << "production 2 MIN: " << *ArrayOfSubstractions.rbegin() << std::endl;
         std::cout << "production 2 Max: " << *ArrayOfSubstractions.rend() << std::endl;
@@ -141,13 +147,6 @@ void testProducerConsumerQueue(int startValue, const std::size_t nMax) {
         transportP2->signifyCompletion();
 
     }).detach();
-
-
-    /*ArrayOfSubstractions.push_back(CollatzValues[CollatzValues.size()])
-
-    ArrayOfSubstractions.push_back(next * )
-    transportP2->push(static_cast<int>(valProd2), 2);
-
 
     // start producer 3
     std::thread([=] {
@@ -162,7 +161,7 @@ void testProducerConsumerQueue(int startValue, const std::size_t nMax) {
         }
 
         if (valProd3 != (nMax * (nMax + 1)) / 2) //TODO checks have to be changed after the calculations are changed
-            throw std::logic_error("unexpected result");
+            throw std::logic_error("Production 3 unexpected result");
 
         transportP3->signifyCompletion();
 
@@ -179,7 +178,7 @@ void testProducerConsumerQueue(int startValue, const std::size_t nMax) {
 
 int main(int argc, char *argv[]) {
     try {
-        testProducerConsumerQueue(3, 1000); //10000000
+        testProducerConsumerQueue(3, 100); //10000000
         std::cout << "All tests ran successfully." << std::endl;
     }
     catch (const std::exception &e) {
