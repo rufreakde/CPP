@@ -132,20 +132,17 @@ void testProducerConsumerQueue(int startValue, const std::size_t nMax) {
                     {
                         if(i != j){
                             ArrayOfSubstractions.insert( abs(collatzValues[i] - collatzValues[j]) );
-                            transportP2->push({*next,
-                                               static_cast<int>(*ArrayOfSubstractions.rbegin()),
-                                               static_cast<int>(*ArrayOfSubstractions.rend())},
-                                              2);
                         }
                     }
+
                 }
             }
+
+            transportP2->push({*next,
+                               static_cast<int>(*ArrayOfSubstractions.begin()),
+                               static_cast<int>(*ArrayOfSubstractions.end())},
+                              2);
         }
-
-
-
-        //if (transportP2->size() != 2)
-        //    throw std::logic_error("Production 2 unexpected result: " + transportP2->size() );
 
         std::cout << "size of set: " << ArrayOfSubstractions.size() << std::endl;
         for(auto elm: ArrayOfSubstractions){
@@ -171,6 +168,7 @@ void testProducerConsumerQueue(int startValue, const std::size_t nMax) {
             auto a_n =   std::get<0>(*next);
             auto min_n = std::get<1>(*next);
             auto max_n = std::get<2>(*next);
+
 
             if(min_n == 0){
                 M0.insert(a_n);
@@ -202,7 +200,7 @@ void testProducerConsumerQueue(int startValue, const std::size_t nMax) {
 
 int main(int argc, char *argv[]) {
     try {
-        testProducerConsumerQueue(3, 100); //10000000
+        testProducerConsumerQueue(3, 10000000); //10000000
         std::cout << "All tests ran successfully." << std::endl;
     }
     catch (const std::exception &e) {
