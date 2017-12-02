@@ -57,7 +57,7 @@ public:
         cv.notify_all();
     }
 
-    std::optional<T> tryPull(SourceId sourceId, std::string consumerName) {
+    std::optional<T> tryPull(SourceId sourceId, const std::string &consumerName) {
         std::unique_lock<std::mutex> lock(mutex);
         auto &elements = sources.at(sourceId).elements;
         while (!productionCompleted && elements.size() <= 0) {
@@ -80,6 +80,8 @@ void testProducerConsumerQueue(int startValue, const std::size_t nMax) {
     // set up transportP1, add source for ourselves
     auto transportP1 = std::make_shared<MulticastMutexTransport<int>>();
     auto sourceIdP1 = transportP1->addSource();
+    auto transportP1_copy = std::make_shared<MulticastMutexTransport<int>>();
+    auto sourceIdP1_copy = std::make_shared<MulticastMutexTransport<int>>();
 
     auto transportP2 = std::make_shared<MulticastMutexTransport<int>>();
     auto sourceIdP2 = transportP2->addSource();
@@ -92,19 +94,21 @@ void testProducerConsumerQueue(int startValue, const std::size_t nMax) {
     // so the thread can keep the transportP1 alive)
     std::thread([=] {
 
-        std::vector<int> CollatzValues = {startValue};
-        transportP1->push(static_cast<int>(CollatzValues[0]), 1);
+        std::vector<int> collatzValues = {startValue};
+        transportP1     ->push(static_cast<int>(collatzValues[0]), 1);
+        transportP1_copy->push(static_cast<int>(collatzValues[0]), 1);
+
 
         for (std::size_t n = 1; n <= nMax; ++n) { //run through the count we set in start
-            if (CollatzValues[n - 1] % 2 == 0) {
-                CollatzValues.push_back(CollatzValues[n - 1] / 2);
+            if (collatzValues[n - 1] % 2 == 0) {
+                collatzValues.push_back(collatzValues[n - 1] / 2);
             } else {
-                CollatzValues.push_back((CollatzValues[n - 1] * 3) + 2);
+                collatzValues.push_back((collatzValues[n - 1] * 3) + 1);
             }
 
-            transportP1->push(static_cast<int>(CollatzValues[n]),
+            transportP1->push(static_cast<int>(collatzValues[n]),
                               1); //push the value you want to push calculate it beforehand!
-            std::cout << "production 1 " << CollatzValues[n] << std::endl; //print the value you push to see results
+            std::cout << "production 1 " << collatzValues[n] << std::endl; //print the value you push to see results
         }
         transportP1->signifyCompletion();
     }).detach();
@@ -114,29 +118,30 @@ void testProducerConsumerQueue(int startValue, const std::size_t nMax) {
     // so the thread can keep the transportP2 alive)
     std::thread([=] {
 
-        std::vector<int> CollatzValues = {};
+        std::vector<int> collatzValues = {};
         std::set<int> ArrayOfSubstractions;
         // consume produced elements
         while (auto next = transportP1->tryPull(sourceIdP1,
                                                 "Producer [2] consuming: sourceIdP1")) { //wait for producer 1
 
-            CollatzValues.push_back(*next);
+            collatzValues.push_back(*next);
 
-            if (CollatzValues.size() > 1) {
+            if (collatzValues.size() > 1) {
 
-                for (size_t i = 0; i< CollatzValues.size(); i++) {
-                    for (size_t j = 0; j< CollatzValues.size(); j++)
+                for (size_t i = 0; i< collatzValues.size(); i++) {
+                    for (size_t j = 0; j< collatzValues.size(); j++)
                     {
                         if(i != j){
-                            ArrayOfSubstractions.insert( abs(CollatzValues[i] - CollatzValues[j]) );
+                            ArrayOfSubstractions.insert( abs(collatzValues[i] - collatzValues[j]) );
                         }
                     }
                 }
             }
         }
 
-        transportP2->push(static_cast<int>(*ArrayOfSubstractions.rbegin()), 2);
-        transportP2->push(static_cast<int>(*ArrayOfSubstractions.rend()), 2);
+        // wir sollten eigentlich einen Tuple ausgeben.
+        transportP2->push(static_cast<int>(*ArrayOfSubstractions.rbegin()), 2); // max
+        transportP2->push(static_cast<int>(*ArrayOfSubstractions.rend()), 2); // min
 
         if (transportP2->size() != 2)
             throw std::logic_error("Production 2 unexpected result: " + transportP2->size() );
