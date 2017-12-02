@@ -107,7 +107,7 @@ void testProducerConsumerQueue(int startValue, const std::size_t nMax) {
 
             transportP1->push(static_cast<int>(collatzValues[n]),
                               1); //push the value you want to push calculate it beforehand!
-            std::cout << "production 1 " << collatzValues[n] << std::endl; //print the value you push to see results
+            //std::cout << "production 1 " << collatzValues[n] << std::endl; //print the value you push to see results
         }
         transportP1->signifyCompletion();
     }).detach();
@@ -144,12 +144,8 @@ void testProducerConsumerQueue(int startValue, const std::size_t nMax) {
                               2);
         }
 
-        std::cout << "size of set: " << ArrayOfSubstractions.size() << std::endl;
-        for(auto elm: ArrayOfSubstractions){
-            std::cout << elm  << std::endl;
-        }
-        std::cout << "production 2 MIN: " << *ArrayOfSubstractions.begin() << std::endl;
-        std::cout << "production 2 Max: " << *ArrayOfSubstractions.end() << std::endl;
+        //std::cout << "production 2 MIN: " << *ArrayOfSubstractions.begin() << std::endl;
+        //std::cout << "production 2 Max: " << *ArrayOfSubstractions.end() << std::endl;
 
         transportP2->signifyCompletion();
 
