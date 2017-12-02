@@ -147,8 +147,12 @@ void testProducerConsumerQueue(int startValue, const std::size_t nMax) {
         //if (transportP2->size() != 2)
         //    throw std::logic_error("Production 2 unexpected result: " + transportP2->size() );
 
-        std::cout << "production 2 MIN: " << *ArrayOfSubstractions.rbegin() << std::endl;
-        std::cout << "production 2 Max: " << *ArrayOfSubstractions.rend() << std::endl;
+        std::cout << "size of set: " << ArrayOfSubstractions.size() << std::endl;
+        for(auto elm: ArrayOfSubstractions){
+            std::cout << elm  << std::endl;
+        }
+        std::cout << "production 2 MIN: " << *ArrayOfSubstractions.begin() << std::endl;
+        std::cout << "production 2 Max: " << *ArrayOfSubstractions.end() << std::endl;
 
         transportP2->signifyCompletion();
 
