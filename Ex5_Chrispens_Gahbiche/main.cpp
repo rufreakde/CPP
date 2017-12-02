@@ -138,13 +138,12 @@ void testProducerConsumerQueue(int startValue, const std::size_t nMax) {
                         }
                     }
                 }
+                transportP2->push({*next,
+                                   static_cast<int>(*ArrayOfSubstractions.begin()),
+                                   static_cast<int>(*ArrayOfSubstractions.end())},
+                                  2);
             }
-
-            transportP2->push({*next,
-                               static_cast<int>(*ArrayOfSubstractions.begin()),
-                               static_cast<int>(*ArrayOfSubstractions.end())},
-                              2);
-
+            
             //std::cout << "production 2 MIN: " << *ArrayOfSubstractions.begin() << std::endl;
             //std::cout << "production 2 Max: " << *ArrayOfSubstractions.end() << std::endl;
         }
