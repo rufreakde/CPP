@@ -107,7 +107,6 @@ void testProducerConsumerQueue(int startValue, const std::size_t nMax) {
 
             transportP1->push(static_cast<int>(collatzValues[n]),
                               1); //push the value you want to push calculate it beforehand!
-            //std::cout << "production 1 " << collatzValues[n] << std::endl; //print the value you push to see results
         }
         transportP1->signifyCompletion();
     }).detach();
@@ -117,13 +116,13 @@ void testProducerConsumerQueue(int startValue, const std::size_t nMax) {
     // so the thread can keep the transportP2 alive)
     std::thread([=] {
 
-        std::vector<int> collatzValues = {};
+        std::set<int> collatzValues = {};
         std::set<int> ArrayOfSubstractions;
         // consume produced elements
         while (auto next = transportP1->tryPull(sourceIdP1,
                                                 "Producer [2] consuming: sourceIdP1")) { //wait for producer 1
 
-            collatzValues.push_back(*next);
+            collatzValues.insert(*next);
 
             if (collatzValues.size() > 1) {
 
@@ -131,10 +130,9 @@ void testProducerConsumerQueue(int startValue, const std::size_t nMax) {
                     for (size_t j = 0; j< collatzValues.size(); j++)
                     {
                         if(i != j){
-                            ArrayOfSubstractions.insert( abs(collatzValues[i] - collatzValues[j]) );
+                            ArrayOfSubstractions.insert( abs(*collatzValues.find(i) - *collatzValues.find(j) ));
                         }
                     }
-
                 }
             }
 
@@ -142,11 +140,10 @@ void testProducerConsumerQueue(int startValue, const std::size_t nMax) {
                                static_cast<int>(*ArrayOfSubstractions.begin()),
                                static_cast<int>(*ArrayOfSubstractions.end())},
                               2);
+
+            //std::cout << "production 2 MIN: " << *ArrayOfSubstractions.begin() << std::endl;
+            //std::cout << "production 2 Max: " << *ArrayOfSubstractions.end() << std::endl;
         }
-
-        //std::cout << "production 2 MIN: " << *ArrayOfSubstractions.begin() << std::endl;
-        //std::cout << "production 2 Max: " << *ArrayOfSubstractions.end() << std::endl;
-
         transportP2->signifyCompletion();
 
     }).detach();
