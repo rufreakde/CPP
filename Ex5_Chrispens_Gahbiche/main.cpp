@@ -80,10 +80,9 @@ void testProducerConsumerQueue(int startValue, const std::size_t nMax) {
     // set up transportP1, add source for ourselves
     auto transportP1 = std::make_shared<MulticastMutexTransport<int>>();
     auto sourceIdP1 = transportP1->addSource();
-    auto transportP1_copy = std::make_shared<MulticastMutexTransport<int>>();
-    auto sourceIdP1_copy = std::make_shared<MulticastMutexTransport<int>>();
 
-    auto transportP2 = std::make_shared<MulticastMutexTransport<int>>();
+    //auto transportP2 = std::make_shared<MulticastMutexTransport<int>>();
+    auto transportP2 = std::make_shared<MulticastMutexTransport<std::tuple<std::vector, int, int>>>(); // stores a_n, max_n, min_n
     auto sourceIdP2 = transportP2->addSource();
 
     auto transportP3 = std::make_shared<MulticastMutexTransport<int>>();
@@ -95,8 +94,7 @@ void testProducerConsumerQueue(int startValue, const std::size_t nMax) {
     std::thread([=] {
 
         std::vector<int> collatzValues = {startValue};
-        transportP1     ->push(static_cast<int>(collatzValues[0]), 1);
-        transportP1_copy->push(static_cast<int>(collatzValues[0]), 1);
+        transportP1->push(static_cast<int>(collatzValues[0]), 1);
 
 
         for (std::size_t n = 1; n <= nMax; ++n) { //run through the count we set in start
@@ -139,9 +137,10 @@ void testProducerConsumerQueue(int startValue, const std::size_t nMax) {
             }
         }
 
-        // wir sollten eigentlich einen Tuple ausgeben.
-        transportP2->push(static_cast<int>(*ArrayOfSubstractions.rbegin()), 2); // max
-        transportP2->push(static_cast<int>(*ArrayOfSubstractions.rend()), 2); // min
+        transportP2->push({collatzValues,
+                          static_cast<int>(*ArrayOfSubstractions.rbegin()),
+                          static_cast<int>(*ArrayOfSubstractions.rend())},
+                           2);
 
         if (transportP2->size() != 2)
             throw std::logic_error("Production 2 unexpected result: " + transportP2->size() );
