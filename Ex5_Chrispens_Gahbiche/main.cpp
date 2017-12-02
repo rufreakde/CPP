@@ -116,6 +116,7 @@ void testProducerConsumerQueue(int startValue, const std::size_t nMax) {
     // so the thread can keep the transportP2 alive)
     std::thread([=] {
 
+        size_t lastSize = 0;
         std::set<int> collatzValues = {};
         std::set<int> ArrayOfSubstractions;
         // consume produced elements
@@ -124,13 +125,16 @@ void testProducerConsumerQueue(int startValue, const std::size_t nMax) {
 
             collatzValues.insert(*next);
 
-            if (collatzValues.size() > 1) {
+            if(lastSize != collatzValues.size()){
+                lastSize = collatzValues.size();
 
-                for (size_t i = 0; i< collatzValues.size(); i++) {
-                    for (size_t j = 0; j< collatzValues.size(); j++)
-                    {
-                        if(i != j){
-                            ArrayOfSubstractions.insert( abs(*collatzValues.find(i) - *collatzValues.find(j) ));
+                if (collatzValues.size() > 1) {
+
+                    for (size_t i = 0; i < collatzValues.size(); i++) {
+                        for (size_t j = 0; j < collatzValues.size(); j++) {
+                            if (i != j) {
+                                ArrayOfSubstractions.insert(abs(*collatzValues.find(i) - *collatzValues.find(j)));
+                            }
                         }
                     }
                 }
