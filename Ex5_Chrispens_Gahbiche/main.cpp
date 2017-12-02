@@ -11,6 +11,7 @@
 
 #include <iostream>
 #include <set>
+#include <cmath>
 
 
 template<typename T>
@@ -70,7 +71,7 @@ public:
         T result = std::move(elements.front());
         elements.pop_front();
 
-        std::cout << consumerName << "  value: " << result << std::endl;
+        //std::cout << consumerName << "  value: " << result << std::endl;
 
         return result;
     }
@@ -82,10 +83,10 @@ void testProducerConsumerQueue(int startValue, const std::size_t nMax) {
     auto sourceIdP1 = transportP1->addSource();
 
     //auto transportP2 = std::make_shared<MulticastMutexTransport<int>>();
-    auto transportP2 = std::make_shared<MulticastMutexTransport<std::tuple<std::vector, int, int>>>(); // stores a_n, max_n, min_n
+    auto transportP2 = std::make_shared<MulticastMutexTransport<std::array<int, 3>>>(); // stores a_n, max_n, min_n
     auto sourceIdP2 = transportP2->addSource();
 
-    auto transportP3 = std::make_shared<MulticastMutexTransport<int>>();
+    auto transportP3 = std::make_shared<MulticastMutexTransport<std::tuple<std::set<int>, std::set<int> >>>();
     auto sourceIdP3 = transportP3->addSource();
 
     // start producer 1
@@ -131,19 +132,20 @@ void testProducerConsumerQueue(int startValue, const std::size_t nMax) {
                     {
                         if(i != j){
                             ArrayOfSubstractions.insert( abs(collatzValues[i] - collatzValues[j]) );
+                            transportP2->push({*next,
+                                               static_cast<int>(*ArrayOfSubstractions.rbegin()),
+                                               static_cast<int>(*ArrayOfSubstractions.rend())},
+                                              2);
                         }
                     }
                 }
             }
         }
 
-        transportP2->push({collatzValues,
-                          static_cast<int>(*ArrayOfSubstractions.rbegin()),
-                          static_cast<int>(*ArrayOfSubstractions.rend())},
-                           2);
 
-        if (transportP2->size() != 2)
-            throw std::logic_error("Production 2 unexpected result: " + transportP2->size() );
+
+        //if (transportP2->size() != 2)
+        //    throw std::logic_error("Production 2 unexpected result: " + transportP2->size() );
 
         std::cout << "production 2 MIN: " << *ArrayOfSubstractions.rbegin() << std::endl;
         std::cout << "production 2 Max: " << *ArrayOfSubstractions.rend() << std::endl;
@@ -155,18 +157,27 @@ void testProducerConsumerQueue(int startValue, const std::size_t nMax) {
     // start producer 3
     std::thread([=] {
         // consume produced elements
-        std::size_t valProd3 = 0;
+        std::set<int> M0;
+        std::set<int> M1;
+        int counter_n = 0;
+
         while (auto next = transportP2->tryPull(sourceIdP2,
                                                 "Producer [3] consuming: sourceIdP2")) { //again wait for Producer 2
-            //TODO calculate and push right values
-            valProd3 = *next; //do math
-            transportP3->push(static_cast<int>(valProd3), 3); //push value of Producer 3
-            std::cout << "production 3 " << valProd3 << std::endl;
+            ++counter_n;
+            auto a_n =   std::get<0>(*next);
+            auto min_n = std::get<1>(*next);
+            auto max_n = std::get<2>(*next);
+
+            if(min_n == 0){
+                M0.insert(a_n);
+            };
+            if(max_n > std::pow(1.5, counter_n)){
+                M1.insert(a_n);
+            };
+
         }
 
-        if (valProd3 != (nMax * (nMax + 1)) / 2) //TODO checks have to be changed after the calculations are changed
-            throw std::logic_error("Production 3 unexpected result");
-
+        transportP3->push({M0, M1},3);
         transportP3->signifyCompletion();
 
     }).detach();
@@ -175,7 +186,12 @@ void testProducerConsumerQueue(int startValue, const std::size_t nMax) {
     // consume produced elements
     //alternatively just joun() producer 3 instead of detach!
     while (auto next = transportP3->tryPull(sourceIdP3, "MainThread consuming: sourceIdP3")) {
-        std::cout << "Final Result: " << *next << std::endl;
+        for(auto m0 : std::get<0>(*next)){
+            std::cout << "Final Result m0: " << m0 << std::endl;
+        }
+        for(auto m1 : std::get<1>(*next)){
+            std::cout << "Final Result m1: " << m1 << std::endl;
+        }
     }
 
 }
