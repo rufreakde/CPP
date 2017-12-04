@@ -242,24 +242,29 @@ void futurePormise(const int startValue, const std::size_t nMax) {
 
     }).detach();
 
+
     size_t n = 0;
     while(n<futureP3.size() && futureP3[n].valid()){
+        // wird nicht richtig ausgeführt.
+
+        std::cout << "n: " << n << std::endl;
         auto next = futureP3[n].get();
-        for(auto m0 : std::get<0>(next)){
+        for (auto m0 : std::get<0>(next)) {
             std::cout << "Final Result using future/promise  m0: " << m0 << std::endl;
         }
-        for(auto m1 : std::get<1>(next)){
+        for (auto m1 : std::get<1>(next)) {
             std::cout << "Final Result using future/promise m1: " << m1 << std::endl;
         }
         n++;
     }
+
 
 }
 
 
 int main(int argc, char *argv[]) {
     try {
-        producerConsumerQueue(9, 100); //10000000
+        producerConsumerQueue(9, 10000000); //10000000
         std::cout << "All tests ran successfully." << std::endl;
     }
     catch (const std::exception &e) {
@@ -267,7 +272,7 @@ int main(int argc, char *argv[]) {
         return 1;
     }
     try {
-        futurePormise(9, 100); //10000000
+        futurePormise(9, 10000000); //10000000
         std::cout << "All tests ran successfully." << std::endl;
     }
     catch (const std::exception &e) {
